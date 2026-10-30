@@ -341,6 +341,37 @@ nav.bar button span{white-space:nowrap}
 nav.bar .bdg{position:absolute;top:0;left:50%;margin:0;transform:translateX(6px);min-width:16px;line-height:16px;padding:0 4px;text-align:center;font-style:normal}
 .pc .im{aspect-ratio:4/3}
 .cartbar{bottom:calc(80px + env(safe-area-inset-bottom,0px))}
+.hm{width:42px;height:42px;border-radius:14px;background:rgba(255,255,255,.14);color:#fff;display:grid;place-items:center;flex:none}
+.hm:active{background:#fff;color:var(--accent)}
+.pc .im{aspect-ratio:4/5}
+.pimg{aspect-ratio:4/5;max-height:62vh;width:auto;margin-left:auto;margin-right:auto;max-width:100%}
+.it2 .im{height:60px;width:48px}
+/* ---- انیمیشن‌ها ---- */
+@keyframes vin{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
+@keyframes vpop{0%{transform:scale(1)}40%{transform:scale(1.14)}100%{transform:scale(1)}}
+@keyframes vslide{from{transform:translateX(-28px);opacity:0}to{transform:none;opacity:1}}
+@keyframes vsheet{from{transform:translateY(40px);opacity:.4}to{transform:none;opacity:1}}
+@keyframes vcart{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}
+@keyframes vshine{from{background-position:100% 0}to{background-position:-100% 0}}
+.vin>*{animation:vin .34s cubic-bezier(.2,.8,.2,1) both}
+.vin>*:nth-child(2){animation-delay:.04s}.vin>*:nth-child(3){animation-delay:.08s}
+.vin .pgrid .pc,.vin .list>.row{animation:vin .36s cubic-bezier(.2,.8,.2,1) both}
+.vin .pgrid .pc:nth-child(2){animation-delay:.04s}.vin .pgrid .pc:nth-child(3){animation-delay:.08s}.vin .pgrid .pc:nth-child(4){animation-delay:.12s}.vin .pgrid .pc:nth-child(n+5){animation-delay:.16s}
+.page{animation:vslide .3s cubic-bezier(.2,.8,.2,1)}
+.sheet{animation:vsheet .3s cubic-bezier(.2,.8,.2,1)}
+.cartbar{animation:vcart .35s cubic-bezier(.2,.8,.2,1)}
+.tap{transition:transform .12s ease,background-color .2s,color .2s,box-shadow .2s}
+.tap:active{transform:scale(.94)}
+.pc .im.tap:active{transform:scale(.98)}
+.qb button:active{transform:scale(.8)}
+.pop{animation:vpop .32s ease}
+nav.bar button svg{transition:transform .25s cubic-bezier(.3,1.6,.5,1)}
+nav.bar button.on svg{transform:translateY(-2px) scale(1.15)}
+nav.bar button{transition:background-color .25s,color .25s}
+.toast{animation:vin .25s ease}
+.btn{transition:transform .12s,background-color .2s,box-shadow .2s}
+.btn:active{transform:scale(.97)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 .top{padding-top:calc(14px + env(safe-area-inset-top,0px))}</style></head><body><div id="app"><main id="main"></main><nav class="bar" id="nav" aria-label="بخش‌های اصلی"></nav></div><div id="pages"></div><div id="sheets"></div><script>
 const BRAND={"icon": "data:image/png;base64,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", "fb": {"apiKey": "AIzaSyCukzk8AarBkttVoIVSmSuNhgoDZWjjsfQ", "authDomain": "daftar-foroush-1e5be.firebaseapp.com", "projectId": "daftar-foroush-1e5be", "storageBucket": "daftar-foroush-1e5be.firebasestorage.app", "messagingSenderId": "940325183562", "appId": "1:940325183562:web:e613ec09311f479a8186b3", "measurementId": "G-N2NR7HBF2H"}};
 document.documentElement.dir = 'rtl'; document.documentElement.lang = 'fa';
@@ -366,7 +397,7 @@ const IC = {
   list: '<path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/>',
   user: '<circle cx="12" cy="8" r="4"/><path d="M4 20c1-4 4-6 8-6s7 2 8 6"/>',
   back: '<path d="M5 12h14M13 6l6 6-6 6"/>', left: '<path d="M15 6l-6 6 6 6"/>', plus: '<path d="M12 5v14M5 12h14"/>',
-  close: '<path d="M6 6l12 12M18 6L6 18"/>', search: '<circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4-4"/>',
+  close: '<path d="M6 6l12 12M18 6L6 18"/>', menu: '<path d="M4 7h16M4 12h16M4 17h16"/>', undo: '<path d="M9 7L4 12l5 5"/><path d="M4 12h10a6 6 0 010 12" transform="translate(0 -4)"/>', search: '<circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4-4"/>',
   pin: '<path d="M12 21s7-6.2 7-11a7 7 0 00-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/>',
   phone: '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A15 15 0 013 6a2 2 0 012-2z"/>',
   trash: '<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>', check: '<path d="M5 12.5l4.5 4.5L19 7"/>', img: '<rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="1.6"/><path d="M4 18l5-5 4 4 3-3 4 4"/>'
@@ -380,7 +411,7 @@ document.addEventListener('change', e => { const t = e.target.closest('[data-ch]
 const idb = () => new Promise((res, rej) => { const r = indexedDB.open('sefaresh', 1); r.onupgradeneeded = () => r.result.createObjectStore('kv'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
 const kvGet = async k => { try { const db = await idb(); return await new Promise(res => { const q = db.transaction('kv').objectStore('kv').get(k); q.onsuccess = () => res(q.result); q.onerror = () => res(null); }); } catch (e) { return null; } };
 const kvSet = async (k, v) => { try { const db = await idb(); await new Promise(res => { const t = db.transaction('kv', 'readwrite'); t.objectStore('kv').put(v, k); t.oncomplete = res; t.onerror = res; }); } catch (e) {} };
-const newS = () => ({ v: 1, code: '', name: '', uid: '', products: {}, cfg: { currency: 'ریال', allowPriceEdit: false }, prodAt: 0, notes: [], cust: {}, orders: {}, pending: [], seq: 0, cart: {}, draft: {} });
+const newS = () => ({ v: 1, code: '', name: '', uid: '', products: {}, cfg: { currency: 'ریال', allowPriceEdit: false }, prodAt: 0, notes: [], cust: {}, orders: {}, pending: [], seq: 0, cart: {}, draft: {}, trash: [], hidden: {} });
 let S = newS(), saveT = 0, ready = false;
 function save() { clearTimeout(saveT); saveT = setTimeout(() => kvSet('s', JSON.parse(JSON.stringify(S))), 250); }
 addEventListener('visibilitychange', () => { if (document.hidden && ready) kvSet('s', JSON.parse(JSON.stringify(S))); });
@@ -436,7 +467,7 @@ async function startWatch() {
     unsubs.push(fs.onSnapshot(fs.doc(db, 'config', 'app'), d => { if (d.exists()) { S.cfg = { ...S.cfg, ...d.data() }; save(); renderKeep(); } }, () => {}));
     unsubs.push(fs.onSnapshot(fs.query(fs.collection(db, 'preorders'), fs.where('visitorUid', '==', user.uid)), snap => { snap.forEach(d => { S.orders[d.id] = { ...(S.orders[d.id] || {}), ...d.data(), id: d.id }; if (S.pending.includes(d.id)) S.pending = S.pending.filter(x => x !== d.id); }); save(); renderKeep(); }, () => {}));
   } catch (e) {}
-  if (!S.notes.length && !Object.keys(S.cust).length) { try { const b = await fs.getDoc(fs.doc(db, 'vdata', code, 'b', 'main')); if (b.exists()) { S.notes = b.data().notes || []; S.cust = b.data().cust || {}; save(); renderKeep(); } } catch (e) {} }
+  if (!S.notes.length && !Object.keys(S.cust).length) { try { const b = await fs.getDoc(fs.doc(db, 'vdata', code, 'b', 'main')); if (b.exists()) { S.notes = b.data().notes || []; S.cust = b.data().cust || {}; S.trash = b.data().trash || []; S.hidden = b.data().hidden || {}; save(); renderKeep(); } } catch (e) {} }
 }
 async function flush() {
   if (!fb || !user || !online() || flush.busy) return; flush.busy = true; const { fs, db } = fb;
@@ -449,7 +480,7 @@ async function flush() {
     }
   } finally { flush.busy = false; save(); renderKeep(); }
 }
-let bkT = 0; function backup() { clearTimeout(bkT); bkT = setTimeout(async () => { if (!fb || !user || !online()) return; try { await fb.fs.setDoc(fb.fs.doc(fb.db, 'vdata', S.code, 'b', 'main'), { notes: S.notes, cust: S.cust, at: Date.now() }); } catch (e) {} }, 2500); }
+let bkT = 0; function backup() { clearTimeout(bkT); bkT = setTimeout(async () => { if (!fb || !user || !online()) return; try { await fb.fs.setDoc(fb.fs.doc(fb.db, 'vdata', S.code, 'b', 'main'), { notes: S.notes, cust: S.cust, trash: S.trash, hidden: S.hidden, at: Date.now() }); } catch (e) {} }, 2500); }
 addEventListener('online', () => { flush(); render(); }); addEventListener('offline', () => render());
 /* ---- ورود ---- */
 let lgMode = 'in';
@@ -502,7 +533,8 @@ function setQty(pid, n, u) {
 const ui = { tab: 'prod', q: '', cat: '', of: 'all' };
 const TABS = [['prod', 'box', 'محصولات'], ['ord', 'cart', 'ثبت سفارش'], ['note', 'note', 'یادداشت'], ['cust', 'users', 'مشتریان'], ['orders', 'list', 'سفارشات'], ['me', 'user', 'پروفایل']];
 const netPill = () => !online() ? '<span class="net off">آفلاین</span>' : S.pending.length ? '<span class="net off">' + fa(S.pending.length) + ' سفارش در انتظار ارسال</span>' : '<span class="net">آنلاین</span>';
-const head = t => t ? '<div class="top"><div class="hrow"><h1 style="flex:1">' + t + '</h1>' + netPill() + '</div></div>' : '<div class="top brand"><div class="hrow"><div class="blogo" style="background:#fff url(' + BRAND.icon + ') center/cover"></div><div style="flex:1"><b>دفتر ثبت سفارشات</b><div class="sub">' + esc(S.name || '') + (S.code ? ' • <span dir="ltr">#' + S.code + '</span>' : '') + '</div></div>' + netPill() + '</div></div>';
+const hm = '<button class="hm tap" data-a="more" aria-label="بیشتر">' + ico('menu', 24) + '</button>';
+const head = t => t ? '<div class="top"><div class="hrow">' + hm + '<h1 style="flex:1">' + t + '</h1>' + netPill() + '</div></div>' : '<div class="top brand"><div class="hrow">' + hm + '<div class="blogo" style="background:#fff url(' + BRAND.icon + ') center/cover"></div><div style="flex:1"><b>دفتر ثبت سفارشات</b><div class="sub">' + esc(S.name || '') + (S.code ? ' • <span dir="ltr">#' + S.code + '</span>' : '') + '</div></div>' + netPill() + '</div></div>';
 function render() {
   const m = $('#main'), n = $('#nav'); if (!ready) { m.innerHTML = ''; return; }
   if (!S.uid || !S.code) { n.innerHTML = ''; m.innerHTML = loginView(); $('.cartbar') && $('.cartbar').remove(); return; }
@@ -515,7 +547,7 @@ function navDraw() {
   n.innerHTML = TABS.map(x => '<button class="tap' + (x[0] === ui.tab ? ' on' : '') + '" data-a="tab" data-id="' + x[0] + '">' + ico(x[1], 24) + '<span>' + x[2] + (x[0] === 'ord' && cartCount() ? '<i class="bdg">' + fa(cartCount()) + '</i>' : '') + '</span></button>').join('');
 }
 const renderKeep = () => { const a = document.activeElement; if (pages.length) { const t = pages[pages.length - 1]; t._redraw && t._redraw(); gridDraw(); return; } if (a && /INPUT|TEXTAREA|SELECT/.test(a.tagName) && $('#main').contains(a)) { if (ui.tab === 'prod') gridDraw(); return; } render(); };
-A.tab = t => { ui.tab = t.dataset.id; ui.q = ''; render(); $('#main').scrollTop = 0; };
+A.tab = t => { if (ui.tab === t.dataset.id) return; ui.tab = t.dataset.id; ui.q = ''; render(); const m = $('#main'); m.scrollTop = 0; m.classList.remove('vin'); void m.offsetWidth; m.classList.add('vin'); clearTimeout(A._vt); A._vt = setTimeout(() => m.classList.remove('vin'), 650); };
 function cartBar() {
   let b = $('.cartbar'); const n = cartCount();
   if (ui.tab !== 'prod' || !n || pages.length) { if (b) b.remove(); return; }
@@ -552,7 +584,7 @@ A.qp = t => { const c = S.cart[t.dataset.id] || { n: 0, u: 'b' }; setQty(t.datas
 A.qm = t => { const c = S.cart[t.dataset.id]; if (c) setQty(t.dataset.id, (c.n || 0) - 1); afterQ(t.dataset.id); };
 C.qin = t => { setQty(t.dataset.id, num(t.value)); afterQ(t.dataset.id); };
 A.unit = t => { setQty(t.dataset.id, null, t.dataset.u); const pg = pages[pages.length - 1]; if (pg && pg._redraw) pg._redraw(); afterQ(t.dataset.id); };
-function afterQ(id) { const pg = pages[pages.length - 1]; if (pg && pg._redraw) pg._redraw(); if (ui.tab === 'ord' && !pg) render(); else { gridDraw(); navDraw(); } }
+function afterQ(id) { setTimeout(() => { document.querySelectorAll('.qb input[data-id="' + id + '"]').forEach(e => { e.classList.remove('pop'); void e.offsetWidth; e.classList.add('pop'); }); }, 0); const pg = pages[pages.length - 1]; if (pg && pg._redraw) pg._redraw(); if (ui.tab === 'ord' && !pg) render(); else { gridDraw(); navDraw(); } }
 A.pd = t => {
   const id = t.dataset.id; const p = openPage({ title: '', body: '', foot: '<button class="btn tap" data-a="pclose">بازگشت به محصولات</button>' }); p.el._id = id;
   p.el._redraw = () => { const x = S.products[id]; if (!x) return p.close(); const c = S.cart[id] || { n: 0, u: 'b' }, big = c.u === 'c' && hasBox(x), pr = big ? x.price * x.per : x.price;
@@ -619,7 +651,7 @@ A['ord-send'] = () => {
 /* -- سفارشات -- */
 const ST = { new: 'جدید', confirmed: 'تأیید شد', invoiced: 'فاکتور شد', shipped: 'ارسال شد', cancel: 'لغو شد' };
 const stOf = o => S.pending.includes(o.id) ? ['wait', 'در انتظار ارسال'] : [o.status, ST[o.status] || o.status];
-const ordList = () => Object.values(S.orders).sort((a, b) => (b.ts || 0) - (a.ts || 0));
+const ordList = () => Object.values(S.orders).filter(o => !(S.hidden || {})[o.id]).sort((a, b) => (b.ts || 0) - (a.ts || 0));
 function tabOrders() {
   const all = ordList(), rows = all.filter(o => ui.of === 'all' || (ui.of === 'wait' ? S.pending.includes(o.id) : o.status === ui.of && !S.pending.includes(o.id)));
   return head('سفارشات') + '<div class="wrap"><div style="padding:12px 0 4px">' + chipsH('of', [['all', 'همه'], ['wait', 'منتظر ارسال'], ['new', 'جدید'], ['confirmed', 'تأیید'], ['invoiced', 'فاکتور شد'], ['shipped', 'ارسال شد'], ['cancel', 'لغو']], ui.of) + '</div><div class="count">' + fa(rows.length) + ' سفارش</div><div class="list">' +
@@ -632,7 +664,7 @@ A.oview = t => {
     p.el.querySelector('h2').textContent = 'سفارش ' + fa(o.no || '');
     p.body.innerHTML = '<div class="box" style="margin-top:12px"><div class="mrow"><b>' + esc(c.name || '') + '</b><span class="pill ' + s[0] + '">' + s[1] + '</span></div><div class="hint">' + fdate(o.ts) + ' ' + ftime(o.ts) + (o.invNo ? ' • فاکتور ' + fa(o.invNo) : '') + '</div>' + (c.mobile ? '<div class="mrow"><span>موبایل</span><a href="tel:' + esc(en(c.mobile)) + '" dir="ltr" style="color:var(--accent)">' + esc(c.mobile) + '</a></div>' : '') + (c.address ? '<div class="hint">' + esc(c.address) + '</div>' : '') + (c.lat ? '<a class="smallbtn" style="display:inline-block;margin-top:6px" href="https://www.google.com/maps/search/?api=1&query=' + c.lat + ',' + c.lng + '" target="_blank" rel="noopener">نمایش روی نقشه</a>' : '') + '</div>' +
       '<div class="box sec sum2">' + (o.items || []).map(l => '<div class="line"><span>' + esc(l.name) + ' <small class="mut">' + lineLabel(l) + '</small></span><b>' + fa(grp(l.total)) + '</b></div>').join('') + '<hr style="border:0;border-top:1px solid var(--line)"><div class="line"><span>جمع کالاها</span><b>' + mu(o.gross || 0) + '</b></div>' + (o.disc ? '<div class="line"><span>تخفیف</span><b>−' + mu(o.disc) + '</b></div>' : '') + (o.ship ? '<div class="line"><span>ارسال</span><b>' + mu(o.ship) + '</b></div>' : '') + '<div class="line" style="font-size:17px"><span>مبلغ نهایی</span><b>' + mu(o.total || 0) + '</b></div></div><div class="hint" style="margin-top:8px">پرداخت: ' + (PAYN[o.pay] || '') + (o.due ? ' • تحویل: ' + esc(o.due) : '') + '</div>' + (o.note ? '<div class="hint">' + esc(o.note) + '</div>' : '') +
-      (cancelable ? '<button class="btn danger tap" style="margin-top:14px" data-a="ocancel" data-id="' + id + '">لغو سفارش</button><div class="hint">لغو فقط تا وقتی وضعیت «جدید» است ممکن است.</div>' : '') + '<button class="btn ghost tap" style="margin-top:10px" data-a="oagain" data-id="' + id + '">ثبت سفارش مشابه</button>'; };
+      (cancelable ? '<button class="btn danger tap" style="margin-top:14px" data-a="ocancel" data-id="' + id + '">لغو سفارش</button><div class="hint">لغو فقط تا وقتی وضعیت «جدید» است ممکن است.</div>' : '') + '<button class="btn ghost tap" style="margin-top:10px" data-a="oagain" data-id="' + id + '">ثبت سفارش مشابه</button>' + (o.status !== 'new' && !S.pending.includes(id) ? '<button class="btn danger tap" style="margin-top:10px" data-a="odel" data-id="' + id + '">' + ico('trash', 18) + 'حذف از لیست</button>' : ''); };
   p.el._redraw();
 };
 A.ocancel = t => { const id = t.dataset.id; ask('این سفارش لغو شود؟', 'لغو سفارش', async () => {
@@ -672,7 +704,7 @@ A.nview = t => {
 };
 A.ndone = t => { const n = S.notes.find(x => x.id === t.dataset.id); n.done = !n.done; save(); backup(); pages[pages.length - 1]._redraw(); };
 A.nedit = t => { const n = S.notes.find(x => x.id === t.dataset.id); noteForm(n); };
-A.ndel = t => ask('این یادداشت حذف شود؟', 'حذف', () => { S.notes = S.notes.filter(x => x.id !== t.dataset.id); save(); backup(); closePage(pages[pages.length - 1]); }, 1);
+A.ndel = t => ask('این یادداشت حذف شود؟ ۳۰ روز در سطل زباله می‌ماند.', 'حذف', () => { const n = S.notes.find(x => x.id === t.dataset.id); if (!n) return; toTrash('note', n.id, n.name, n); S.notes = S.notes.filter(x => x.id !== n.id); save(); backup(); closePage(pages[pages.length - 1]); toast('به سطل زباله رفت'); }, 1);
 A.n2o = t => { const n = S.notes.find(x => x.id === t.dataset.id); S.draft = { ...S.draft, name: n.name, mobile: n.mobile, address: n.address, lat: n.lat, lng: n.lng }; save(); A['go-ord'](); };
 /* -- مشتریان -- */
 function custStats(c) { const k = ckey(c.name), os = ordList().filter(o => ckey((o.c || {}).name) === k && o.status !== 'cancel'), ns = S.notes.filter(n => ckey(n.name) === k); return { os, ns, sum: os.reduce((s, o) => s + (o.total || 0), 0) }; }
@@ -687,7 +719,7 @@ A.cview = t => {
   p.el._redraw = () => { const c = S.cust[k]; if (!c) return p.close(); const s = custStats(c); p.el.querySelector('h2').textContent = c.name;
     p.body.innerHTML = '<div class="box" style="margin-top:12px"><b>' + esc(c.name) + '</b>' + (c.mobile ? '<div class="mrow"><span>موبایل</span><a href="tel:' + esc(en(c.mobile)) + '" dir="ltr" style="color:var(--accent)">' + esc(c.mobile) + '</a></div>' : '') + (c.address ? '<div class="hint">' + esc(c.address) + '</div>' : '') + (c.lat ? '<a class="smallbtn" style="display:inline-block;margin-top:6px" href="https://www.google.com/maps/search/?api=1&query=' + c.lat + ',' + c.lng + '" target="_blank" rel="noopener">نمایش روی نقشه</a>' : '') + '</div>' +
       '<div class="boxes g2" style="margin-top:8px"><div class="cell"><small>جمع سفارش‌ها</small><b>' + mu(s.sum) + '</b></div><div class="cell"><small>تعداد سفارش / ویزیت</small><b>' + fa(s.os.length) + ' / ' + fa(s.ns.length) + '</b></div></div>' +
-      '<div class="btns" style="margin-top:12px"><button class="btn tap" data-a="c2o" data-id="' + k + '">ثبت سفارش</button><button class="btn ghost tap" data-a="c2n" data-id="' + k + '">یادداشت</button></div><button class="btn ghost tap" style="margin-top:8px" data-a="cedit" data-id="' + k + '">ویرایش اطلاعات</button>' +
+      '<div class="btns" style="margin-top:12px"><button class="btn tap" data-a="c2o" data-id="' + k + '">ثبت سفارش</button><button class="btn ghost tap" data-a="c2n" data-id="' + k + '">یادداشت</button></div><button class="btn ghost tap" style="margin-top:8px" data-a="cedit" data-id="' + k + '">ویرایش اطلاعات</button><button class="btn danger tap" style="margin-top:8px" data-a="cdel" data-id="' + k + '">' + ico('trash', 18) + 'حذف مشتری</button>' +
       '<div class="hdr2"><h3>سابقه</h3></div><div class="list">' + s.os.map(o => rowH({ a: 'oview', id: o.id, title: 'سفارش ' + fa(o.no || ''), sub: fdate(o.ts), icon: 'list', end: '<b>' + fa(grp(o.total || 0)) + '</b>' })).join('') + s.ns.map(n => rowH({ a: 'nview', id: n.id, title: 'ویزیت: ' + (n.text || '').slice(0, 30), sub: fdate(n.ts), icon: 'note' })).join('') + '</div>'; };
   p.el._redraw();
 };
@@ -708,10 +740,37 @@ A.refresh = async () => { if (!online()) return toast('اینترنت وصل ن�
 A.logout = () => ask('از حساب خارج شوی؟' + (S.pending.length ? ' (' + fa(S.pending.length) + ' سفارش هنوز ارسال نشده و پاک می‌شود!)' : ''), 'خروج', async () => { try { stopWatch(); if (fb) await fb.auth.signOut(fb.au); } catch (e) {} const keep = S.code; S = newS(); user = null; await kvSet('s', S); lgMode = 'in'; render(); }, 1);
 A.chpw = () => openSheet('<h3 class="st">تغییر رمز</h3>' + field('رمز فعلی', 'cp0', '', { type: 'password', attr: 'dir="ltr"' }) + field('رمز جدید (دست‌کم ۶ نویسه)', 'cp1', '', { type: 'password', attr: 'dir="ltr"' }) + '<div class="pr"><button class="btn tap" data-a="chpw-ok">ذخیره</button></div>');
 A['chpw-ok'] = async () => { const p0 = $('#cp0').value, p1 = $('#cp1').value; if (p1.length < 6) return toast('رمز جدید کوتاه است.', 1); if (!fb || !user || !online()) return toast('برای تغییر رمز اینترنت لازم است.', 1); try { await fb.auth.reauthenticateWithCredential(user, fb.auth.EmailAuthProvider.credential(mail(S.code), p0)); await fb.auth.updatePassword(user, p1); closeSheet(); toast('رمز عوض شد'); } catch (e) { toast(errFa(e), 1); } };
+/* -- سطل زباله و بیشتر -- */
+const TRASH_MS = 30 * 864e5, KIND = { order: 'سفارش', note: 'یادداشت', cust: 'مشتری' };
+function toTrash(kind, id, title, data) { S.trash = S.trash || []; S.trash.push({ tid: uid(), kind, id, title, data, ts: Date.now() }); save(); }
+function purgeTrash() { const n = Date.now(), b = (S.trash || []).length; S.trash = (S.trash || []).filter(x => n - x.ts < TRASH_MS); if (S.trash.length !== b) save(); }
+A.odel = t => { const id = t.dataset.id, o = S.orders[id]; ask('این سفارش از لیست حذف شود؟ ۳۰ روز در سطل زباله می‌ماند و قابل بازگردانی است.', 'حذف', () => { S.hidden = S.hidden || {}; S.hidden[id] = Date.now(); toTrash('order', id, 'سفارش ' + fa(o.no || '') + ' • ' + ((o.c || {}).name || ''), null); closePage(pages[pages.length - 1]); toast('به سطل زباله رفت'); }, 1); };
+A.cdel = t => { const k = t.dataset.id, c = S.cust[k]; ask('این مشتری حذف شود؟ (سفارش‌ها و یادداشت‌هایش می‌مانند) ۳۰ روز در سطل زباله است.', 'حذف', () => { toTrash('cust', k, c.name, c); delete S.cust[k]; save(); backup(); closePage(pages[pages.length - 1]); toast('به سطل زباله رفت'); }, 1); };
+A.more = () => {
+  const p = openPage({ title: 'بیشتر', body: '' });
+  p.el._redraw = () => { purgeTrash(); p.body.innerHTML = '<div class="list" style="margin-top:12px">' + rowH({ a: 'trash', title: 'سطل زباله', sub: 'موارد حذف‌شده تا ۳۰ روز قابل بازگردانی است', icon: 'trash', end: S.trash.length ? '<b>' + fa(S.trash.length) + '</b>' : '' }) + '</div><div class="hint" style="text-align:center;margin-top:16px">امکانات بیشتر به‌زودی اضافه می‌شود.</div>'; }; p.el._redraw();
+};
+A.trash = () => {
+  const p = openPage({ title: 'سطل زباله', body: '' });
+  p.el._redraw = () => { purgeTrash(); const rows = S.trash.slice().sort((a, b) => b.ts - a.ts);
+    p.body.innerHTML = '<div class="hint" style="margin-top:12px">روی هر مورد بزن تا ببینی و اگر خواستی بازگردانی کنی. بعد از ۳۰ روز خودکار پاک می‌شود.</div><div class="list" style="margin-top:8px">' + (rows.map(x => rowH({ a: 'tview', id: x.tid, title: x.title || KIND[x.kind], sub: KIND[x.kind] + ' • حذف: ' + fdate(x.ts) + ' • ' + fa(Math.max(0, Math.ceil((TRASH_MS - (Date.now() - x.ts)) / 864e5))) + ' روز مانده', icon: x.kind === 'note' ? 'note' : x.kind === 'cust' ? 'users' : 'list' })).join('') || empty('سطل زباله خالی است')) + '</div>'; }; p.el._redraw();
+};
+function trashInfo(x) {
+  if (x.kind === 'note') { const n = x.data; return '<b>' + esc(n.name) + '</b><div class="hint">' + fdate(n.ts) + '</div><div style="margin-top:6px">' + esc(n.text || '').replace(/\n/g, '<br>') + '</div>'; }
+  if (x.kind === 'cust') { const c = x.data; return '<b>' + esc(c.name) + '</b><div class="hint">' + esc(c.mobile || '') + ' ' + esc(c.address || '') + '</div>'; }
+  const o = S.orders[x.id]; return o ? '<b>' + esc((o.c || {}).name || '') + '</b><div class="hint">' + fdate(o.ts) + ' • ' + (ST[o.status] || '') + '</div>' + (o.items || []).map(l => '<div>' + esc(l.name) + ' — ' + lineLabel(l) + '</div>').join('') + '<div style="margin-top:6px"><b>' + mu(o.total || 0) + '</b></div>' : '';
+}
+A.tview = t => { const x = S.trash.find(y => y.tid === t.dataset.id); if (!x) return; openSheet('<h3 class="st">' + KIND[x.kind] + ' حذف‌شده</h3><div class="box">' + trashInfo(x) + '</div><div class="pr"><button class="btn tap" data-a="trest" data-id="' + x.tid + '">بازگردانی</button><button class="btn danger tap" data-a="tperm" data-id="' + x.tid + '">حذف همیشگی</button></div>'); };
+A.trest = t => {
+  const x = S.trash.find(y => y.tid === t.dataset.id); if (!x) return;
+  if (x.kind === 'order') delete S.hidden[x.id]; else if (x.kind === 'note') S.notes.push(x.data); else S.cust[x.id] = x.data;
+  S.trash = S.trash.filter(y => y !== x); save(); backup(); closeSheet(); toast('بازگردانی شد'); const pg = pages[pages.length - 1]; if (pg && pg._redraw) pg._redraw();
+};
+A.tperm = t => { const id = t.dataset.id; closeSheet(); ask('برای همیشه حذف شود؟', 'حذف همیشگی', () => { S.trash = S.trash.filter(y => y.tid !== id); save(); backup(); const pg = pages[pages.length - 1]; if (pg && pg._redraw) pg._redraw(); }, 1); };
 const VIEWS = { prod: tabProd, ord: tabOrd, note: tabNote, cust: tabCust, orders: tabOrders, me: tabMe };
 /* ---- شروع ---- */
 (async function () {
-  const s = await kvGet('s'); if (s && s.v) S = { ...newS(), ...s }; ready = true; render();
+  const s = await kvGet('s'); if (s && s.v) S = { ...newS(), ...s }; ready = true; purgeTrash(); render();
   if (S.uid && online() && BRAND.fb) fbInit().catch(() => {});
   setInterval(() => { if (S.pending.length) flush(); }, 20000);
   window.__sf = { get S() { return S; }, render, get fb() { return fb; } };
