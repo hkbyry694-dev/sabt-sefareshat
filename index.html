@@ -415,6 +415,29 @@ const newS = () => ({ v: 1, code: '', name: '', uid: '', products: {}, cfg: { cu
 let S = newS(), saveT = 0, ready = false;
 function save() { clearTimeout(saveT); saveT = setTimeout(() => kvSet('s', JSON.parse(JSON.stringify(S))), 250); }
 addEventListener('visibilitychange', () => { if (document.hidden && ready) kvSet('s', JSON.parse(JSON.stringify(S))); });
+/* ---- تقویم شمسی ---- */
+const JM = ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
+const jfmt = new Intl.DateTimeFormat('en-US-u-ca-persian-nu-latn', { year: 'numeric', month: 'numeric', day: 'numeric', timeZone: 'UTC' });
+const jOf = dt => { const p = {}; jfmt.formatToParts(dt).forEach(x => { p[x.type] = +x.value; }); return { y: p.year, m: p.month, d: p.day }; };
+const utc = (y, m, d) => new Date(Date.UTC(y, m, d, 12));
+function j2g(y, m, d) { let g = utc(y + 621, 2, 21 + Math.round((m - 1) * 30.5 + d - 1)); for (let i = 0; i < 12; i++) { const j = jOf(g), diff = (j.y - y) * 372 + (j.m - m) * 31 + (j.d - d); if (!diff) return g; g = new Date(+g + (diff > 0 ? -1 : 1) * 864e5); } return g; }
+const isoU = g => g.getUTCFullYear() + '-' + String(g.getUTCMonth() + 1).padStart(2, '0') + '-' + String(g.getUTCDate()).padStart(2, '0');
+function jMonthLen(y, m) { const s = j2g(y, m, 1); let n = 29; while (jOf(new Date(+s + n * 864e5)).m === m) n++; return n; }
+const jpBtn = (label, id, iso, ph) => '<div class="f"><label>' + label + '</label><button type="button" class="pick tap" id="' + id + '" data-a="jp" data-t="' + id + '"><span>' + (iso ? isoFa(iso) : '<span class="mut">' + ph + '</span>') + '</span>' + ico('left', 16) + '</button></div>';
+const jpTarget = { dpd: ['payDue', () => dr()], ddv: ['deliver', () => dr()], nfb: ['follow', () => nf] };
+let jp = null;
+function jpDraw() {
+  const w = jp.w, y = jp.y, m = jp.m, len = jMonthLen(y, m), first = j2g(y, m, 1), off = (first.getUTCDay() + 1) % 7, tj = jOf(new Date()), cur = jp.val;
+  let h = '<div class="mrow" style="align-items:center"><button class="smallbtn tap" data-a="jp-nav" data-v="1">‹ بعد</button><b style="font-size:16px">' + JM[m - 1] + ' ' + fa(y) + '</b><button class="smallbtn tap" data-a="jp-nav" data-v="-1">قبل ›</button></div><div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:10px;text-align:center">' + ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'ج'].map(x => '<small class="mut">' + x + '</small>').join('');
+  for (let i = 0; i < off; i++) h += '<span></span>';
+  for (let d = 1; d <= len; d++) { const iso = isoU(utc(first.getUTCFullYear(), first.getUTCMonth(), first.getUTCDate() + d - 1)), sel = iso === cur, td = tj.y === y && tj.m === m && tj.d === d; h += '<button class="tap" data-a="jp-d" data-iso="' + iso + '" style="height:40px;border-radius:12px;' + (sel ? 'background:var(--accent);color:#fff;font-weight:700' : td ? 'border:1.5px solid var(--accent);color:var(--accent)' : 'background:var(--bg)') + '">' + fa(d) + '</button>'; }
+  h += '</div><div class="btns" style="margin-top:12px"><button class="btn ghost tap" data-a="jp-today">امروز</button><button class="btn ghost tap" data-a="jp-clear">حذف تاریخ</button></div>';
+  $('#jpb', w).innerHTML = h;
+}
+A.jp = t => { const id = t.dataset.t, o = jpTarget[id][1](), val = o[jpTarget[id][0]] || '', j = val ? jOf(new Date(val + 'T12:00:00Z')) : jOf(new Date()); jp = { id, y: j.y, m: j.m, val, w: openSheet('<h3 class="st">انتخاب تاریخ (شمسی)</h3><div id="jpb"></div>') }; jpDraw(); };
+A['jp-nav'] = t => { const v = +t.dataset.v; jp.m += v; if (jp.m > 12) { jp.m = 1; jp.y++; } if (jp.m < 1) { jp.m = 12; jp.y--; } jpDraw(); };
+function jpSet(iso) { const id = jp.id, k = jpTarget[id][0]; jpTarget[id][1]()[k] = iso; save(); closeSheet(jp.w); const b = $('#' + id); if (b) b.firstChild.innerHTML = iso ? isoFa(iso) : '<span class="mut">انتخاب تاریخ</span>'; if (id !== 'nfb') render(); }
+A['jp-d'] = t => jpSet(t.dataset.iso); A['jp-today'] = () => jpSet(isoDay(Date.now())); A['jp-clear'] = () => jpSet('');
 /* ---- اجزای رابط ---- */
 let toastT;
 function toast(msg, err) { const old = $('.toast'); if (old) old.remove(); const t = document.createElement('div'); t.className = 'toast' + (err ? ' err' : ''); t.textContent = msg; document.body.appendChild(t); clearTimeout(toastT); toastT = setTimeout(() => t.remove(), err ? 3800 : 2200); }
@@ -454,17 +477,17 @@ const normCode = s => { const d = en(String(s || '')).replace(/\D/g, ''); return
 const mail = code => 'v' + code + '@visitor.app';
 const errFa = e => { const c = (e && (e.code || e.message)) || ''; const m = { 'auth/invalid-credential': 'کد یا رمز اشتباه است.', 'auth/wrong-password': 'رمز اشتباه است.', 'auth/user-not-found': 'برای این کد هنوز رمز ساخته نشده؛ «اولین ورود» را بزن.', 'auth/email-already-in-use': 'این کد قبلاً فعال شده؛ با رمزت وارد شو.', 'auth/weak-password': 'رمز باید دست‌کم ۶ نویسه باشد.', 'auth/network-request-failed': 'اینترنت وصل نیست.', 'auth/too-many-requests': 'تلاش زیاد؛ چند دقیقه بعد دوباره.', 'permission-denied': 'اجازهٔ دسترسی نیست.' }; return m[c] || ('خطا: ' + c); };
 function stopWatch() { watching = false; unsubs.forEach(f => { try { f(); } catch (e) {} }); unsubs = []; }
-let watching = false;
+let watching = false; const dg = { pn: null, pe: '', gate: '' };
 async function startWatch() {
   if (!fb || !user || watching) return; watching = true; const { fs, db } = fb, code = S.code;
   try {
-    const g = await fs.getDoc(fs.doc(db, 'visitorGate', code));
+    const g = await fs.getDoc(fs.doc(db, 'visitorGate', code)); dg.gate = g.exists() ? (g.data().active === false ? 'غیرفعال' : 'فعال') + (g.data().claimed ? ' • رمز ساخته شده' : '') : 'پیدا نشد';
     if (g.exists() && g.data().active === false) { await fb.auth.signOut(fb.au); S.uid = ''; save(); toast('این حساب غیرفعال شده است.', 1); return; }
     
   } catch (e) {}
   try {
     unsubs.push(fs.onSnapshot(fs.doc(db, 'visitors', code), d => { if (d.exists()) { if (d.data().name) S.name = d.data().name; if (d.data().comm) S.vcomm = { ...d.data().comm, at: Date.now() }; save(); renderKeep(); } }, () => {}));
-    unsubs.push(fs.onSnapshot(fs.collection(db, 'products'), snap => { const m = {}; snap.forEach(d => { m[d.id] = d.data(); }); S.products = m; S.prodAt = Date.now(); save(); renderKeep(); }, () => {}));
+    unsubs.push(fs.onSnapshot(fs.collection(db, 'products'), snap => { const m = {}; snap.forEach(d => { m[d.id] = d.data(); }); S.products = m; S.prodAt = Date.now(); dg.pn = snap.size; dg.pe = ''; save(); renderKeep(); }, e => { dg.pe = (e && e.code) || String(e); renderKeep(); }));
     unsubs.push(fs.onSnapshot(fs.doc(db, 'config', 'app'), d => { if (d.exists()) { S.cfg = { ...S.cfg, ...d.data() }; save(); renderKeep(); } }, () => {}));
     unsubs.push(fs.onSnapshot(fs.query(fs.collection(db, 'preorders'), fs.where('visitorUid', '==', user.uid)), snap => { snap.forEach(d => { S.orders[d.id] = { ...(S.orders[d.id] || {}), ...d.data(), id: d.id }; if (S.pending.includes(d.id)) S.pending = S.pending.filter(x => x !== d.id); }); save(); renderKeep(); }, () => {}));
   } catch (e) {}
@@ -570,7 +593,7 @@ function cardH(p) {
 function gridDraw() {
   const g = $('#pg'); if (!g) return; const q = ui.q.trim();
   const rows = prods().filter(p => (!ui.cat || (ui.cat === '★' ? (S.fav || {})[p.id] : p.cat === ui.cat)) && (!q || (p.name || '').includes(q))).sort((a, b) => (a.name || '').localeCompare(b.name || '', 'fa'));
-  g.innerHTML = rows.length ? '<div class="pgrid">' + rows.map(cardH).join('') + '</div>' : empty(prods().length ? 'محصولی پیدا نشد' : 'کاتالوگ هنوز خالی است', '<div class="hint">' + (online() ? 'از مدیر بخواه کاتالوگ را منتشر کند.' : 'برای دریافت محصولات یک بار آنلاین شو.') + '</div>');
+  g.innerHTML = rows.length ? '<div class="pgrid">' + rows.map(cardH).join('') + '</div>' : empty(prods().length ? 'محصولی پیدا نشد' : 'کاتالوگ هنوز خالی است', '<div class="hint">' + (dg.pe ? 'خطا در دریافت: ' + esc(dg.pe) + '. ' : '') + (online() ? 'از مدیر بخواه کاتالوگ را منتشر کند، یا از بیشتر ← عیب‌یابی را بزن.' : 'برای دریافت محصولات یک بار آنلاین شو.') + '</div>');
   cartBar();
 }
 const cats = () => [...new Set(prods().map(p => p.cat).filter(Boolean))];
@@ -606,8 +629,8 @@ function tabOrd() {
     '<div class="hdr2"><h3>اقلام سفارش (' + fa(ls.length) + ')</h3><button class="smallbtn tap" data-a="tab" data-id="prod">+ افزودن محصول</button></div><div id="cl2">' + (ls.length ? ls.map(lineRow).join('') : empty('سبد خالی است', '<div class="hint">از تب محصولات، محصول اضافه کن.</div>')) + '</div>' +
     '<div class="box sec"><b>تخفیف، کرایه و پرداخت</b>' + field('تخفیف (' + cur() + ')', 'dd', d.disc ? fa(grp(d.disc)) : '', { attr: 'data-in="drm" data-k="disc" inputmode="decimal"' }) + field('هزینهٔ ارسال (' + cur() + ')', 'ds', d.ship ? fa(grp(d.ship)) : '', { attr: 'data-in="drm" data-k="ship" inputmode="decimal"' }) +
     '<div class="f"><label>نحوهٔ پرداخت</label><div style="padding-top:8px">' + chipsH('dpay', [['cash', 'نقد'], ['credit', 'اعتباری'], ['cheque', 'چک']], d.pay || 'cash') + '</div></div>' +
-    ((d.pay === 'credit' || d.pay === 'cheque') ? field('تاریخ تسویه / سررسید', 'dpd', d.payDue || '', { type: 'date', attr: 'data-in="dr" data-k="payDue"' }) + (d.payDue ? '<div class="hint">' + isoFa(d.payDue) + '</div>' : '') : '') +
-    field('تاریخ تحویل دلخواه', 'ddv', d.deliver || '', { type: 'date', attr: 'data-in="dr" data-k="deliver"' }) + (d.deliver ? '<div class="hint">' + isoFa(d.deliver) + '</div>' : '') + area('توضیحات', 'dno', d.note, 'data-in="dr" data-k="note"') + '</div>' +
+    ((d.pay === 'credit' || d.pay === 'cheque') ? jpBtn('تاریخ تسویه / سررسید', 'dpd', d.payDue, 'انتخاب تاریخ') : '') +
+    jpBtn('تاریخ تحویل دلخواه', 'ddv', d.deliver, 'انتخاب تاریخ') + area('توضیحات', 'dno', d.note, 'data-in="dr" data-k="note"') + '</div>' +
     '<div class="box sec sum2"><div class="line"><span>جمع کالاها</span><b>' + mu(gross) + '</b></div>' + (disc ? '<div class="line"><span>تخفیف</span><b class="neg">−' + mu(disc) + '</b></div>' : '') + (ship ? '<div class="line"><span>ارسال</span><b>' + mu(ship) + '</b></div>' : '') + '<div class="line" style="font-size:17px"><span>مبلغ نهایی</span><b>' + mu(total) + '</b></div></div>' +
     '<button class="btn tap" style="margin-top:14px" data-a="ord-review">بررسی و تأیید سفارش</button><button class="btn ghost tap" style="margin-top:8px" data-a="ord-clear">پاک کردن فرم</button></div>';
 }
@@ -687,14 +710,14 @@ function tabNote() {
 }
 let nf = null;
 function noteForm(n) {
-  nf = { id: n ? n.id : '', lat: n ? n.lat : 0, lng: n ? n.lng : 0 };
+  nf = { id: n ? n.id : '', lat: n ? n.lat : 0, lng: n ? n.lng : 0, follow: n ? n.follow || '' : '' };
   const p = openPage({ title: n ? 'ویرایش یادداشت' : 'یادداشت ویزیت', body: field('نام فروشگاه / مشتری *', 'nn', n ? n.name : '', { attr: 'list="cl"' }) + '<datalist id="cl">' + known().map(c => '<option value="' + esc(c.name) + '">').join('') + '</datalist>' + field('شماره تماس', 'nm', n ? n.mobile : '', { attr: 'inputmode="tel" dir="ltr"' }) + area('آدرس', 'na', n ? n.address : '') +
-      '<div style="margin-top:10px"><button class="btn ghost tap" data-a="loc-n" id="nloc">' + ico('pin', 18) + (nf.lat ? 'موقعیت ثبت شد (ثبت دوباره)' : 'ثبت موقعیت مکانی من') + '</button></div>' + area('یادداشت (نتیجهٔ ویزیت، درخواست مشتری…)', 'nt', n ? n.text : '') + field('تاریخ پیگیری', 'nf', n ? n.follow : '', { type: 'date' }), foot: '<button class="btn tap" data-a="nsave">ذخیره</button>' });
+      '<div style="margin-top:10px"><button class="btn ghost tap" data-a="loc-n" id="nloc">' + ico('pin', 18) + (nf.lat ? 'موقعیت ثبت شد (ثبت دوباره)' : 'ثبت موقعیت مکانی من') + '</button></div>' + area('یادداشت (نتیجهٔ ویزیت، درخواست مشتری…)', 'nt', n ? n.text : '') + jpBtn('تاریخ پیگیری', 'nfb', n ? n.follow : '', 'انتخاب تاریخ'), foot: '<button class="btn tap" data-a="nsave">ذخیره</button>' });
 }
 A.nnew = () => noteForm(null); A['loc-n'] = () => locate((a, b) => { nf.lat = a; nf.lng = b; const x = $('#nloc'); if (x) x.lastChild.textContent = 'موقعیت ثبت شد (ثبت دوباره)'; toast('موقعیت ثبت شد'); });
 A.nsave = t => {
   const name = $('#nn').value.trim(); if (!name) return toast('نام مشتری را وارد کن.', 1);
-  const kc = S.cust[ckey(name)] || {}, d = { name, mobile: $('#nm').value.trim(), address: $('#na').value.trim(), lat: nf.lat || 0, lng: nf.lng || 0, text: $('#nt').value.trim(), follow: $('#nf').value || '' };
+  const kc = S.cust[ckey(name)] || {}, d = { name, mobile: $('#nm').value.trim(), address: $('#na').value.trim(), lat: nf.lat || 0, lng: nf.lng || 0, text: $('#nt').value.trim(), follow: nf.follow || '' };
   if (nf.id) { const n = S.notes.find(x => x.id === nf.id); Object.assign(n, d); } else S.notes.push({ id: uid(), ts: Date.now(), done: false, ...d });
   upCust(d, Date.now()); save(); backup(); closePage(t.closest('.page')); toast('یادداشت ذخیره شد');
 };
@@ -754,7 +777,7 @@ A.more = () => {
   const p = openPage({ title: 'بیشتر', body: '' });
   p.el._redraw = () => { purgeTrash(); const fu = S.notes.filter(n => n.follow && !n.done && n.follow <= today()).length;
     const R = (a, t, sub, ic, end) => rowH({ a, title: t, sub, icon: ic, end: end || '' });
-    p.body.innerHTML = '<div class="list" style="margin-top:12px">' + R('fu', 'پیگیری‌ها', 'مشتریانی که باید بهشان سر بزنی', 'bell', fu ? '<b class="neg">' + fa(fu) + '</b>' : '') + R('route', 'مسیر امروز', 'انتخاب مشتری‌ها و مسیر در نقشه', 'route') + R('rep', 'گزارش من', 'روزانه، هفتگی، ماهانه و برترین‌ها', 'chart') + R('comm', 'پورسانت من', 'درآمد و پرداخت‌ها', 'coin') + R('inact', 'مشتریان بدون سفارش', 'کسانی که مدتی سفارش نداده‌اند', 'users') + R('favs', 'پرسفارش‌ها و علاقه‌مندی‌ها', 'میان‌بر به محصولات همیشگی', 'star') + R('trash', 'سطل زباله', 'موارد حذف‌شده تا ۳۰ روز', 'trash', S.trash.length ? '<b>' + fa(S.trash.length) + '</b>' : '') + R('setg', 'تنظیمات', 'تم، اندازهٔ نوشته، پاک‌کردن حافظهٔ موقت', 'gear') + R('bk', 'پشتیبان‌گیری', 'ذخیره و بازیابی یادداشت‌ها و مشتریان', 'cloud') + '</div>'; }; p.el._redraw();
+    p.body.innerHTML = '<div class="list" style="margin-top:12px">' + R('fu', 'پیگیری‌ها', 'مشتریانی که باید بهشان سر بزنی', 'bell', fu ? '<b class="neg">' + fa(fu) + '</b>' : '') + R('route', 'مسیر امروز', 'انتخاب مشتری‌ها و مسیر در نقشه', 'route') + R('rep', 'گزارش من', 'روزانه، هفتگی، ماهانه و برترین‌ها', 'chart') + R('comm', 'پورسانت من', 'درآمد و پرداخت‌ها', 'coin') + R('inact', 'مشتریان بدون سفارش', 'کسانی که مدتی سفارش نداده‌اند', 'users') + R('favs', 'پرسفارش‌ها و علاقه‌مندی‌ها', 'میان‌بر به محصولات همیشگی', 'star') + R('trash', 'سطل زباله', 'موارد حذف‌شده تا ۳۰ روز', 'trash', S.trash.length ? '<b>' + fa(S.trash.length) + '</b>' : '') + R('setg', 'تنظیمات', 'تم، اندازهٔ نوشته، پاک‌کردن حافظهٔ موقت', 'gear') + R('diag', 'عیب‌یابی اتصال', 'اگر کاتالوگ یا سفارش‌ها نمی‌آید', 'cloud') + R('bk', 'پشتیبان‌گیری', 'ذخیره و بازیابی یادداشت‌ها و مشتریان', 'cloud') + '</div>'; }; p.el._redraw();
 };
 A.trash = () => {
   const p = openPage({ title: 'سطل زباله', body: '' });
@@ -898,6 +921,11 @@ A.setg = () => sub('تنظیمات', p => { S.set = S.set || { theme: 'auto', fs
     '<div class="box sec"><b>حافظهٔ موقت</b><div class="hint">اگر نسخهٔ جدید اپ نمی‌آید، این را بزن. اطلاعات و سفارش‌هایت پاک نمی‌شود.</div><button class="btn ghost tap" style="margin-top:8px" data-a="clr">پاک‌کردن حافظهٔ موقت و بارگذاری دوباره</button></div><div class="hint" style="text-align:center;margin-top:12px">نسخهٔ اپ: ۲</div>';
 });
 A.clr = async () => { try { for (const k of await caches.keys()) await caches.delete(k); const rg = await navigator.serviceWorker.getRegistrations(); for (const r of rg) await r.unregister(); } catch (e) {} location.reload(); };
+A.diag = () => sub('عیب‌یابی اتصال', p => {
+  const kv = (k, v) => '<div class="mrow"><span>' + k + '</span><b>' + v + '</b></div>';
+  p.body.innerHTML = '<div class="box" style="margin-top:12px">' + kv('اینترنت', online() ? 'وصل' : 'قطع') + kv('کد ویزیتور', '<span dir="ltr">#' + esc(S.code) + '</span>') + kv('ورود به حساب', user ? 'بله' : 'خیر') + kv('وضعیت کد در سرور', esc(dg.gate || '—')) + kv('محصولات دریافت‌شده از سرور', dg.pn == null ? '—' : fa(dg.pn)) + kv('محصولات ذخیره در گوشی', fa(Object.keys(S.products).length)) + kv('آخرین خطا', esc(dg.pe || 'ندارد')) + '</div><button class="btn tap" style="margin-top:12px" data-a="diag-run">آزمایش دریافت محصولات</button><div id="dgo" class="hint" style="margin-top:10px"></div>';
+});
+A['diag-run'] = async () => { const o = $('#dgo'); o.textContent = 'در حال آزمایش…'; try { const f = await fbInit(); const sn = await f.fs.getDocs(f.fs.collection(f.db, 'products')); o.textContent = 'نتیجه: ' + fa(sn.size) + ' محصول روی سرور هست.' + (sn.size ? '' : ' یعنی دفتر فروش هنوز چیزی منتشر نکرده (محصول باید «نمایان» و دارای قیمت کاتالوگ باشد).'); } catch (e) { o.textContent = 'خطا: ' + ((e && e.code) || e) + ' — ' + errFa(e); } };
 A.bk = () => sub('پشتیبان‌گیری', p => {
   p.body.innerHTML = '<div class="hint" style="margin-top:12px">یادداشت‌ها، مشتریان، سطل زباله و علاقه‌مندی‌ها در یک فایل ذخیره می‌شود. (سفارش‌ها روی سرور هستند.) اگر آنلاین باشی، خودکار هم پشتیبان ابری گرفته می‌شود.</div><button class="btn tap" style="margin-top:12px" data-a="bk-out">دانلود فایل پشتیبان</button><button class="btn ghost tap" style="margin-top:8px" data-a="bk-in">بازیابی از فایل</button><input type="file" id="bkf" accept=".json,application/json" hidden>';
 });
