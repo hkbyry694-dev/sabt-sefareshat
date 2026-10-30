@@ -397,7 +397,7 @@ const IC = {
   list: '<path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/>',
   user: '<circle cx="12" cy="8" r="4"/><path d="M4 20c1-4 4-6 8-6s7 2 8 6"/>',
   back: '<path d="M5 12h14M13 6l6 6-6 6"/>', left: '<path d="M15 6l-6 6 6 6"/>', plus: '<path d="M12 5v14M5 12h14"/>',
-  close: '<path d="M6 6l12 12M18 6L6 18"/>', menu: '<path d="M4 7h16M4 12h16M4 17h16"/>', undo: '<path d="M9 7L4 12l5 5"/><path d="M4 12h10a6 6 0 010 12" transform="translate(0 -4)"/>', search: '<circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4-4"/>',
+  star: '<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>', route: '<circle cx="6" cy="18" r="2.2"/><circle cx="18" cy="6" r="2.2"/><path d="M8 18h6a3 3 0 000-6h-4a3 3 0 010-6h6"/>', chart: '<path d="M4 20V5M4 20h16"/><path d="M8 15l3-4 3 2 4-6"/>', coin: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7v10M9.5 9.5c0-1 1-1.6 2.5-1.6s2.5.7 2.5 1.7c0 2.2-5 1.2-5 3.7 0 1 1 1.7 2.5 1.7s2.5-.6 2.5-1.6"/>', gear: '<circle cx="12" cy="12" r="3"/><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M18.4 5.6l-1.8 1.8M7.4 16.6l-1.8 1.8"/>', bell: '<path d="M6 17V11a6 6 0 0112 0v6l1.5 2h-15z"/><path d="M10 21h4"/>', cloud: '<path d="M7 18a4.5 4.5 0 01-.6-8.96A6 6 0 0118 9.5 4.3 4.3 0 0117.5 18z"/>', close: '<path d="M6 6l12 12M18 6L6 18"/>', menu: '<path d="M4 7h16M4 12h16M4 17h16"/>', undo: '<path d="M9 7L4 12l5 5"/><path d="M4 12h10a6 6 0 010 12" transform="translate(0 -4)"/>', search: '<circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4-4"/>',
   pin: '<path d="M12 21s7-6.2 7-11a7 7 0 00-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/>',
   phone: '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A15 15 0 013 6a2 2 0 012-2z"/>',
   trash: '<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>', check: '<path d="M5 12.5l4.5 4.5L19 7"/>', img: '<rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="1.6"/><path d="M4 18l5-5 4 4 3-3 4 4"/>'
@@ -411,7 +411,7 @@ document.addEventListener('change', e => { const t = e.target.closest('[data-ch]
 const idb = () => new Promise((res, rej) => { const r = indexedDB.open('sefaresh', 1); r.onupgradeneeded = () => r.result.createObjectStore('kv'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
 const kvGet = async k => { try { const db = await idb(); return await new Promise(res => { const q = db.transaction('kv').objectStore('kv').get(k); q.onsuccess = () => res(q.result); q.onerror = () => res(null); }); } catch (e) { return null; } };
 const kvSet = async (k, v) => { try { const db = await idb(); await new Promise(res => { const t = db.transaction('kv', 'readwrite'); t.objectStore('kv').put(v, k); t.oncomplete = res; t.onerror = res; }); } catch (e) {} };
-const newS = () => ({ v: 1, code: '', name: '', uid: '', products: {}, cfg: { currency: 'ریال', allowPriceEdit: false }, prodAt: 0, notes: [], cust: {}, orders: {}, pending: [], seq: 0, cart: {}, draft: {}, trash: [], hidden: {} });
+const newS = () => ({ v: 1, code: '', name: '', uid: '', products: {}, cfg: { currency: 'ریال', allowPriceEdit: false }, prodAt: 0, notes: [], cust: {}, orders: {}, pending: [], seq: 0, cart: {}, draft: {}, trash: [], hidden: {}, fav: {}, set: { theme: 'auto', fs: 'm' } });
 let S = newS(), saveT = 0, ready = false;
 function save() { clearTimeout(saveT); saveT = setTimeout(() => kvSet('s', JSON.parse(JSON.stringify(S))), 250); }
 addEventListener('visibilitychange', () => { if (document.hidden && ready) kvSet('s', JSON.parse(JSON.stringify(S))); });
@@ -460,9 +460,10 @@ async function startWatch() {
   try {
     const g = await fs.getDoc(fs.doc(db, 'visitorGate', code));
     if (g.exists() && g.data().active === false) { await fb.auth.signOut(fb.au); S.uid = ''; save(); toast('این حساب غیرفعال شده است.', 1); return; }
-    const v = await fs.getDoc(fs.doc(db, 'visitors', code)); if (v.exists() && v.data().name) { S.name = v.data().name; save(); }
+    
   } catch (e) {}
   try {
+    unsubs.push(fs.onSnapshot(fs.doc(db, 'visitors', code), d => { if (d.exists()) { if (d.data().name) S.name = d.data().name; if (d.data().comm) S.vcomm = { ...d.data().comm, at: Date.now() }; save(); renderKeep(); } }, () => {}));
     unsubs.push(fs.onSnapshot(fs.collection(db, 'products'), snap => { const m = {}; snap.forEach(d => { m[d.id] = d.data(); }); S.products = m; S.prodAt = Date.now(); save(); renderKeep(); }, () => {}));
     unsubs.push(fs.onSnapshot(fs.doc(db, 'config', 'app'), d => { if (d.exists()) { S.cfg = { ...S.cfg, ...d.data() }; save(); renderKeep(); } }, () => {}));
     unsubs.push(fs.onSnapshot(fs.query(fs.collection(db, 'preorders'), fs.where('visitorUid', '==', user.uid)), snap => { snap.forEach(d => { S.orders[d.id] = { ...(S.orders[d.id] || {}), ...d.data(), id: d.id }; if (S.pending.includes(d.id)) S.pending = S.pending.filter(x => x !== d.id); }); save(); renderKeep(); }, () => {}));
@@ -568,13 +569,13 @@ function cardH(p) {
 }
 function gridDraw() {
   const g = $('#pg'); if (!g) return; const q = ui.q.trim();
-  const rows = prods().filter(p => (!ui.cat || p.cat === ui.cat) && (!q || (p.name || '').includes(q))).sort((a, b) => (a.name || '').localeCompare(b.name || '', 'fa'));
+  const rows = prods().filter(p => (!ui.cat || (ui.cat === '★' ? (S.fav || {})[p.id] : p.cat === ui.cat)) && (!q || (p.name || '').includes(q))).sort((a, b) => (a.name || '').localeCompare(b.name || '', 'fa'));
   g.innerHTML = rows.length ? '<div class="pgrid">' + rows.map(cardH).join('') + '</div>' : empty(prods().length ? 'محصولی پیدا نشد' : 'کاتالوگ هنوز خالی است', '<div class="hint">' + (online() ? 'از مدیر بخواه کاتالوگ را منتشر کند.' : 'برای دریافت محصولات یک بار آنلاین شو.') + '</div>');
   cartBar();
 }
 const cats = () => [...new Set(prods().map(p => p.cat).filter(Boolean))];
 function tabProd() {
-  const cs = cats();
+  const cs = cats().concat(Object.keys(S.fav || {}).length ? ['★'] : []);
   return head('') + '<div class="wrap"><div class="srow" style="margin-top:12px"><input class="search" data-in="q" placeholder="جستجوی محصول" value="' + esc(ui.q) + '" style="width:100%;background:var(--card);border:1.5px solid var(--line);border-radius:999px;padding:12px 16px;min-height:46px"></div>' +
     (cs.length ? '<div style="margin-top:10px">' + chipsH('cat', [['', 'همه']].concat(cs.map(c => [c, esc(c)])), ui.cat) + '</div>' : '') +
     '<div class="hint" style="margin-top:8px">' + (S.prodAt ? 'آخرین به‌روزرسانی کاتالوگ: ' + fdate(S.prodAt) + ' ' + ftime(S.prodAt) : '') + '</div><div id="pg"></div></div>' + (setTimeout(gridDraw, 0), '');
@@ -589,7 +590,7 @@ A.pd = t => {
   const id = t.dataset.id; const p = openPage({ title: '', body: '', foot: '<button class="btn tap" data-a="pclose">بازگشت به محصولات</button>' }); p.el._id = id;
   p.el._redraw = () => { const x = S.products[id]; if (!x) return p.close(); const c = S.cart[id] || { n: 0, u: 'b' }, big = c.u === 'c' && hasBox(x), pr = big ? x.price * x.per : x.price;
     p.el.querySelector('h2').textContent = x.name;
-    p.body.innerHTML = '<div class="pimg"' + (x.img ? ' style="background-image:url(' + x.img + ')"' : '') + '></div><div class="box" style="margin-top:12px"><div class="mrow"><b style="font-size:17px">' + esc(x.name) + '</b></div><div class="pr2" style="font-size:18px;color:var(--accent);font-weight:700">' + mu(pr) + ' <small style="font-weight:400;color:var(--muted)">/ ' + esc(big ? x.u2 : x.unit || '') + '</small></div><div class="hint">' + (x.stock > 0 ? 'موجودی: ' + qf(x.stock) + ' ' + esc(x.unit || '') + (hasBox(x) ? ' (' + qf(Math.floor(x.stock / x.per)) + ' ' + esc(x.u2) + ')' : '') : 'ناموجود') + '</div>' + (x.cat ? '<div class="hint">دسته: ' + esc(x.cat) + '</div>' : '') + (hasBox(x) ? '<div class="hint">هر ' + esc(x.u2) + ' = ' + fa(x.per) + ' ' + esc(x.unit || '') + '</div>' : '') + '</div>' + '<div class="box sec">' + ctlH({ ...x, id }) + '</div>';
+    p.body.innerHTML = '<div class="pimg"' + (x.img ? ' style="background-image:url(' + x.img + ')"' : '') + '></div><div class="box" style="margin-top:12px"><div class="mrow"><b style="font-size:17px">' + esc(x.name) + '</b></div><div class="pr2" style="font-size:18px;color:var(--accent);font-weight:700">' + mu(pr) + ' <small style="font-weight:400;color:var(--muted)">/ ' + esc(big ? x.u2 : x.unit || '') + '</small></div><div class="hint">' + (x.stock > 0 ? 'موجودی: ' + qf(x.stock) + ' ' + esc(x.unit || '') + (hasBox(x) ? ' (' + qf(Math.floor(x.stock / x.per)) + ' ' + esc(x.u2) + ')' : '') : 'ناموجود') + '</div>' + (x.cat ? '<div class="hint">دسته: ' + esc(x.cat) + '</div>' : '') + (hasBox(x) ? '<div class="hint">هر ' + esc(x.u2) + ' = ' + fa(x.per) + ' ' + esc(x.unit || '') + '</div>' : '') + '</div>' + '<div class="box sec">' + ctlH({ ...x, id }) + '</div><button class="btn ghost tap" style="margin-top:10px" data-a="fav" data-id="' + id + '">' + ((S.fav || {})[id] ? '★ حذف از علاقه‌مندی‌ها' : '☆ افزودن به علاقه‌مندی‌ها') + '</button>';
   }; p.el._redraw();
 };
 /* -- سفارش -- */
@@ -640,13 +641,16 @@ A['ord-review'] = () => {
     '<div class="box" style="margin-top:10px"><b>' + esc(d.name) + '</b>' + (d.mobile ? '<div class="hint" dir="ltr" style="text-align:right">' + esc(d.mobile) + '</div>' : '') + (d.address ? '<div class="hint">' + esc(d.address) + '</div>' : '') + '</div>' +
     '<div class="box sec sum2">' + b.ls.map(l => '<div class="line"><span>' + esc(l.name) + ' <small class="mut">' + lineLabel(l) + '</small></span><b>' + fa(grp(l.total)) + '</b></div>').join('') + '<hr style="border:0;border-top:1px solid var(--line)">' + '<div class="line"><span>جمع کالاها</span><b>' + mu(b.gross) + '</b></div>' + (b.disc ? '<div class="line"><span>تخفیف</span><b>−' + mu(b.disc) + '</b></div>' : '') + (b.ship ? '<div class="line"><span>ارسال</span><b>' + mu(b.ship) + '</b></div>' : '') + '<div class="line" style="font-size:17px"><span>مبلغ نهایی</span><b>' + mu(b.total) + '</b></div></div>' +
     '<div class="hint" style="margin-top:8px">پرداخت: ' + PAYN[b.pay] + (d.payDue ? ' • ' + isoFa(d.payDue) : '') + (d.deliver ? ' • تحویل: ' + isoFa(d.deliver) : '') + '</div>' +
-    '<div class="pr"><button class="btn tap" data-a="ord-send">تأیید و ارسال سفارش</button><button class="btn ghost tap" data-a="sclose">بازگشت و ویرایش</button></div>');
+    '<div class="pr"><button class="btn ghost tap" data-a="pf-open" data-draft="1">' + ico('note', 18) + 'پیش‌فاکتور برای مشتری</button><button class="btn tap" data-a="ord-send">تأیید و ارسال سفارش</button><button class="btn ghost tap" data-a="sclose">بازگشت و ویرایش</button></div>');
 };
-A['ord-send'] = () => {
-  const d = dr(), b = buildOrder(); closeSheet(); S.seq = (S.seq || 0) + 1; const id = S.code + '-' + uid(), ts = Date.now();
+function draftOrder(id, no, ts) {
+  const d = dr(), b = buildOrder();
   const note = [d.note, d.pay !== 'cash' && d.payDue ? 'تسویه/سررسید: ' + isoFa(d.payDue) : ''].filter(Boolean).join(' • ');
-  const o = { id, no: S.seq, ts, visitorUid: S.uid, visitorName: S.name || '', visitorCode: '#' + S.code, c: { name: d.name.trim(), mobile: d.mobile || '', address: d.address || '', postal: d.postal || '', lat: d.lat || 0, lng: d.lng || 0 }, items: b.ls.map(l => { const x = { pid: l.pid, name: l.name, unit: l.unit, qty: l.qty, price: l.price, total: l.total }; if (l.bn) { x.bn = l.bn; x.bu = l.bu; x.bp = l.bp; x.big = 1; } return x; }), gross: b.gross, disc: b.disc, ship: b.ship, total: b.total, pay: b.pay, due: d.deliver ? isoFa(d.deliver) : '', note, status: 'new' };
-  S.orders[id] = o; S.pending.push(id); upCust(o.c, ts); S.cart = {}; S.draft = {}; save(); ui.tab = 'orders'; render(); toast(online() ? 'سفارش ثبت شد' : 'سفارش ذخیره شد؛ با اتصال اینترنت ارسال می‌شود'); flush();
+  return { id, no, ts, visitorUid: S.uid, visitorName: S.name || '', visitorCode: '#' + S.code, c: { name: (d.name || '').trim(), mobile: d.mobile || '', address: d.address || '', postal: d.postal || '', lat: d.lat || 0, lng: d.lng || 0 }, items: b.ls.map(l => { const x = { pid: l.pid, name: l.name, unit: l.unit, qty: l.qty, price: l.price, total: l.total }; if (l.bn) { x.bn = l.bn; x.bu = l.bu; x.bp = l.bp; x.big = 1; } return x; }), gross: b.gross, disc: b.disc, ship: b.ship, total: b.total, pay: b.pay, due: d.deliver ? isoFa(d.deliver) : '', payDue: d.pay !== 'cash' && d.payDue ? isoFa(d.payDue) : '', note, status: 'new' };
+}
+A['ord-send'] = () => {
+  const d = dr(); closeSheet(); S.seq = (S.seq || 0) + 1; const o = draftOrder(S.code + '-' + uid(), S.seq, Date.now());
+  S.orders[o.id] = o; S.pending.push(o.id); upCust(o.c, o.ts); S.cart = {}; S.draft = {}; save(); ui.tab = 'orders'; render(); toast(online() ? 'سفارش ثبت شد' : 'سفارش ذخیره شد؛ با اتصال اینترنت ارسال می‌شود'); flush();
 };
 /* -- سفارشات -- */
 const ST = { new: 'جدید', confirmed: 'تأیید شد', invoiced: 'فاکتور شد', shipped: 'ارسال شد', cancel: 'لغو شد' };
@@ -664,7 +668,7 @@ A.oview = t => {
     p.el.querySelector('h2').textContent = 'سفارش ' + fa(o.no || '');
     p.body.innerHTML = '<div class="box" style="margin-top:12px"><div class="mrow"><b>' + esc(c.name || '') + '</b><span class="pill ' + s[0] + '">' + s[1] + '</span></div><div class="hint">' + fdate(o.ts) + ' ' + ftime(o.ts) + (o.invNo ? ' • فاکتور ' + fa(o.invNo) : '') + '</div>' + (c.mobile ? '<div class="mrow"><span>موبایل</span><a href="tel:' + esc(en(c.mobile)) + '" dir="ltr" style="color:var(--accent)">' + esc(c.mobile) + '</a></div>' : '') + (c.address ? '<div class="hint">' + esc(c.address) + '</div>' : '') + (c.lat ? '<a class="smallbtn" style="display:inline-block;margin-top:6px" href="https://www.google.com/maps/search/?api=1&query=' + c.lat + ',' + c.lng + '" target="_blank" rel="noopener">نمایش روی نقشه</a>' : '') + '</div>' +
       '<div class="box sec sum2">' + (o.items || []).map(l => '<div class="line"><span>' + esc(l.name) + ' <small class="mut">' + lineLabel(l) + '</small></span><b>' + fa(grp(l.total)) + '</b></div>').join('') + '<hr style="border:0;border-top:1px solid var(--line)"><div class="line"><span>جمع کالاها</span><b>' + mu(o.gross || 0) + '</b></div>' + (o.disc ? '<div class="line"><span>تخفیف</span><b>−' + mu(o.disc) + '</b></div>' : '') + (o.ship ? '<div class="line"><span>ارسال</span><b>' + mu(o.ship) + '</b></div>' : '') + '<div class="line" style="font-size:17px"><span>مبلغ نهایی</span><b>' + mu(o.total || 0) + '</b></div></div><div class="hint" style="margin-top:8px">پرداخت: ' + (PAYN[o.pay] || '') + (o.due ? ' • تحویل: ' + esc(o.due) : '') + '</div>' + (o.note ? '<div class="hint">' + esc(o.note) + '</div>' : '') +
-      (cancelable ? '<button class="btn danger tap" style="margin-top:14px" data-a="ocancel" data-id="' + id + '">لغو سفارش</button><div class="hint">لغو فقط تا وقتی وضعیت «جدید» است ممکن است.</div>' : '') + '<button class="btn ghost tap" style="margin-top:10px" data-a="oagain" data-id="' + id + '">ثبت سفارش مشابه</button>' + (o.status !== 'new' && !S.pending.includes(id) ? '<button class="btn danger tap" style="margin-top:10px" data-a="odel" data-id="' + id + '">' + ico('trash', 18) + 'حذف از لیست</button>' : ''); };
+      (cancelable ? '<button class="btn danger tap" style="margin-top:14px" data-a="ocancel" data-id="' + id + '">لغو سفارش</button><div class="hint">لغو فقط تا وقتی وضعیت «جدید» است ممکن است.</div>' : '') + '<button class="btn ghost tap" style="margin-top:10px" data-a="oagain" data-id="' + id + '">ثبت سفارش مشابه</button><button class="btn ghost tap" style="margin-top:10px" data-a="pf-open" data-id="' + id + '">' + ico('note', 18) + 'پیش‌فاکتور برای مشتری</button>' + (o.status !== 'new' && !S.pending.includes(id) ? '<button class="btn danger tap" style="margin-top:10px" data-a="odel" data-id="' + id + '">' + ico('trash', 18) + 'حذف از لیست</button>' : ''); };
   p.el._redraw();
 };
 A.ocancel = t => { const id = t.dataset.id; ask('این سفارش لغو شود؟', 'لغو سفارش', async () => {
@@ -734,7 +738,7 @@ function tabMe() {
   const td = rep(+d0), mo = rep(+m0), vis = from => S.notes.filter(n => n.ts >= from).length;
   return head('پروفایل') + '<div class="wrap"><div class="box" style="margin-top:12px"><div class="mrow"><span>نام</span><b>' + esc(S.name || '—') + '</b></div><div class="mrow"><span>کد ویزیتور</span><b dir="ltr">#' + esc(S.code) + '</b></div><div class="mrow"><span>آخرین به‌روزرسانی کاتالوگ</span><b>' + (S.prodAt ? fdate(S.prodAt) + ' ' + ftime(S.prodAt) : '—') + '</b></div><div class="mrow"><span>سفارش در انتظار ارسال</span><b>' + fa(S.pending.length) + '</b></div></div>' +
     '<div class="hdr2"><h3>گزارش من</h3></div><div class="boxes g2"><div class="cell"><small>امروز</small><b>' + fa(td.n) + ' سفارش</b><div class="hint">' + mu(td.s) + ' • ' + fa(vis(+d0)) + ' ویزیت</div></div><div class="cell"><small>ماه جاری</small><b>' + fa(mo.n) + ' سفارش</b><div class="hint">' + mu(mo.s) + ' • ' + fa(vis(+m0)) + ' ویزیت</div></div></div>' +
-    '<button class="btn tap" style="margin-top:14px" data-a="refresh">به‌روزرسانی کاتالوگ و ارسال معوق</button><button class="btn ghost tap" style="margin-top:8px" data-a="chpw">تغییر رمز</button><button class="btn danger tap" style="margin-top:8px" data-a="logout">خروج از حساب</button><div class="hint" style="text-align:center;margin-top:14px">موجودی و قیمت‌ها وقتی به‌روز می‌شوند که مدیر دفتر فروش را آنلاین باز کرده باشد.</div></div>';
+    ''+ field('شماره تماس من (روی پیش‌فاکتور)', 'myph', (S.me || {}).phone || '', { attr: 'data-in="myph" inputmode="tel" dir="ltr"' }) + '<button class="btn tap" style="margin-top:14px" data-a="refresh">به‌روزرسانی کاتالوگ و ارسال معوق</button><button class="btn ghost tap" style="margin-top:8px" data-a="chpw">تغییر رمز</button><button class="btn danger tap" style="margin-top:8px" data-a="logout">خروج از حساب</button><div class="hint" style="text-align:center;margin-top:14px">موجودی و قیمت‌ها وقتی به‌روز می‌شوند که مدیر دفتر فروش را آنلاین باز کرده باشد.</div></div>';
 }
 A.refresh = async () => { if (!online()) return toast('اینترنت وصل نیست.', 1); try { await fbInit(); stopWatch(); await startWatch(); await flush(); toast('به‌روز شد'); } catch (e) { toast(errFa(e), 1); } };
 A.logout = () => ask('از حساب خارج شوی؟' + (S.pending.length ? ' (' + fa(S.pending.length) + ' سفارش هنوز ارسال نشده و پاک می‌شود!)' : ''), 'خروج', async () => { try { stopWatch(); if (fb) await fb.auth.signOut(fb.au); } catch (e) {} const keep = S.code; S = newS(); user = null; await kvSet('s', S); lgMode = 'in'; render(); }, 1);
@@ -748,7 +752,9 @@ A.odel = t => { const id = t.dataset.id, o = S.orders[id]; ask('این سفار�
 A.cdel = t => { const k = t.dataset.id, c = S.cust[k]; ask('این مشتری حذف شود؟ (سفارش‌ها و یادداشت‌هایش می‌مانند) ۳۰ روز در سطل زباله است.', 'حذف', () => { toTrash('cust', k, c.name, c); delete S.cust[k]; save(); backup(); closePage(pages[pages.length - 1]); toast('به سطل زباله رفت'); }, 1); };
 A.more = () => {
   const p = openPage({ title: 'بیشتر', body: '' });
-  p.el._redraw = () => { purgeTrash(); p.body.innerHTML = '<div class="list" style="margin-top:12px">' + rowH({ a: 'trash', title: 'سطل زباله', sub: 'موارد حذف‌شده تا ۳۰ روز قابل بازگردانی است', icon: 'trash', end: S.trash.length ? '<b>' + fa(S.trash.length) + '</b>' : '' }) + '</div><div class="hint" style="text-align:center;margin-top:16px">امکانات بیشتر به‌زودی اضافه می‌شود.</div>'; }; p.el._redraw();
+  p.el._redraw = () => { purgeTrash(); const fu = S.notes.filter(n => n.follow && !n.done && n.follow <= today()).length;
+    const R = (a, t, sub, ic, end) => rowH({ a, title: t, sub, icon: ic, end: end || '' });
+    p.body.innerHTML = '<div class="list" style="margin-top:12px">' + R('fu', 'پیگیری‌ها', 'مشتریانی که باید بهشان سر بزنی', 'bell', fu ? '<b class="neg">' + fa(fu) + '</b>' : '') + R('route', 'مسیر امروز', 'انتخاب مشتری‌ها و مسیر در نقشه', 'route') + R('rep', 'گزارش من', 'روزانه، هفتگی، ماهانه و برترین‌ها', 'chart') + R('comm', 'پورسانت من', 'درآمد و پرداخت‌ها', 'coin') + R('inact', 'مشتریان بدون سفارش', 'کسانی که مدتی سفارش نداده‌اند', 'users') + R('favs', 'پرسفارش‌ها و علاقه‌مندی‌ها', 'میان‌بر به محصولات همیشگی', 'star') + R('trash', 'سطل زباله', 'موارد حذف‌شده تا ۳۰ روز', 'trash', S.trash.length ? '<b>' + fa(S.trash.length) + '</b>' : '') + R('setg', 'تنظیمات', 'تم، اندازهٔ نوشته، پاک‌کردن حافظهٔ موقت', 'gear') + R('bk', 'پشتیبان‌گیری', 'ذخیره و بازیابی یادداشت‌ها و مشتریان', 'cloud') + '</div>'; }; p.el._redraw();
 };
 A.trash = () => {
   const p = openPage({ title: 'سطل زباله', body: '' });
@@ -767,10 +773,140 @@ A.trest = t => {
   S.trash = S.trash.filter(y => y !== x); save(); backup(); closeSheet(); toast('بازگردانی شد'); const pg = pages[pages.length - 1]; if (pg && pg._redraw) pg._redraw();
 };
 A.tperm = t => { const id = t.dataset.id; closeSheet(); ask('برای همیشه حذف شود؟', 'حذف همیشگی', () => { S.trash = S.trash.filter(y => y.tid !== id); save(); backup(); const pg = pages[pages.length - 1]; if (pg && pg._redraw) pg._redraw(); }, 1); };
+I.myph = t => { S.me = S.me || {}; S.me.phone = t.value; save(); };
+/* -- پیش‌فاکتور (عکس و متن) -- */
+const pfc = () => ({ name: '', phone: '', addr: '', note: '', hours: 72, label: 'غیررسمی', ...(S.cfg.pf || {}) });
+let pfO = null;
+function pfDates(o) { const c = pfc(), exp = (o.ts || Date.now()) + c.hours * 36e5; return { c, exp }; }
+function pfText(o) {
+  const { c, exp } = pfDates(o), cu = cur(), L = '──────────', c2 = o.c || {};
+  const lines = ['📋 پیش‌فاکتور شماره ' + fa(o.no || ''), c2.name || '', fdate(o.ts || Date.now()), L];
+  (o.items || []).forEach(i => { lines.push('• ' + i.name + ' — ' + lineLabel(i)); lines.push('  ' + fa(grp(i.total))); });
+  lines.push(L, 'جمع کالاها: ' + fa(grp(o.gross || 0)) + ' ' + cu); if (o.disc) lines.push('تخفیف: −' + fa(grp(o.disc))); if (o.ship) lines.push('ارسال: ' + fa(grp(o.ship)));
+  lines.push('✅ قابل پرداخت: ' + fa(grp(o.total || 0)) + ' ' + cu, 'پرداخت: ' + (PAYN[o.pay] || '') + (o.payDue ? ' تا ' + o.payDue : ''));
+  if (o.due) lines.push('تحویل: ' + o.due);
+  lines.push(L); const me = (S.me || {}).phone;
+  lines.push('ویزیتور: ' + (S.name || '') + (me ? ' ' + fa(en(me)) : '')); if (c.name) lines.push(c.name + (c.phone ? ' ' + fa(en(c.phone)) : '')); if (c.addr) lines.push(c.addr); if (c.note) lines.push(c.note);
+  lines.push('(' + (c.label ? c.label + '، ' : '') + fa(c.hours) + ' ساعت اعتبار)');
+  return lines.join('\n');
+}
+const loadImg = src => new Promise(r => { const i = new Image(); i.onload = () => r(i); i.onerror = () => r(null); i.src = src; });
+async function pfImage(o) {
+  const { c, exp } = pfDates(o), cu = cur(), c2 = o.c || {}, W = 720, P = 32, F = 'Vazirmatn, Tahoma, sans-serif';
+  try { await Promise.race([document.fonts.load('700 22px Vazirmatn'), new Promise(r => setTimeout(r, 800))]); } catch (e) {}
+  const items = o.items || [], rowsH = items.reduce((s, i) => s + (i.bn ? 74 : 56), 0);
+  const notes = [o.payDue ? 'پرداخت: ' + (PAYN[o.pay] || '') + ' • سررسید ' + o.payDue : 'پرداخت: ' + (PAYN[o.pay] || ''), o.due ? 'تحویل دلخواه: ' + o.due : '', (c.label ? 'این پیش‌فاکتور ' + c.label + ' است و ' : 'این پیش‌فاکتور ') + 'تا ' + fa(c.hours) + ' ساعت (' + fdate(exp) + ' ' + ftime(exp) + ') اعتبار دارد.'].filter(Boolean);
+  const H = 150 + 190 + 60 + rowsH + 20 + 40 + ((o.disc ? 1 : 0) + (o.ship ? 1 : 0) + 2) * 40 + 40 + notes.length * 36 + 30 + 40;
+  const cv = document.createElement('canvas'); cv.width = W; cv.height = H; const x = cv.getContext('2d'); x.direction = 'rtl';
+  const T = (t, px, py, o2) => { o2 = o2 || {}; x.font = (o2.w || 400) + ' ' + (o2.s || 22) + 'px ' + F; x.fillStyle = o2.c || '#13183a'; x.textAlign = o2.a || 'right'; x.textBaseline = 'middle'; let tx = String(t); const mw = o2.mw; if (mw) while (x.measureText(tx).width > mw && tx.length > 3) tx = tx.slice(0, -2); if (mw && tx !== String(t)) tx += '…'; x.fillText(tx, px, py); };
+  const rr = (a, b, w, h, r, f) => { x.beginPath(); x.roundRect(a, b, w, h, r); x.fillStyle = f; x.fill(); };
+  x.fillStyle = '#fff'; x.fillRect(0, 0, W, H); x.fillStyle = '#04234b'; x.fillRect(0, 0, W, 150);
+  const ic = await loadImg(BRAND.icon); if (ic) { rr(W - P - 92, 29, 92, 92, 22, '#fff'); x.drawImage(ic, W - P - 86, 35, 80, 80); }
+  T('پیش‌فاکتور سفارش', W - P - 112, 62, { s: 34, w: 700, c: '#fff' }); T('شماره ' + fa(o.no || '') + ' • ' + fdate(o.ts || Date.now()), W - P - 112, 106, { s: 22, c: '#c9d2ff' });
+  if (c.label) { x.font = '700 20px ' + F; const lw = x.measureText(c.label).width + 36; rr(P, 55, lw, 40, 20, '#ffa000'); T(c.label, P + lw / 2, 76, { s: 20, w: 700, c: '#3a2500', a: 'center' }); }
+  let y = 190; const kv = (k, v) => { T(k, W - P, y, { c: '#6a7392', s: 21 }); T(v, P, y, { a: 'left', w: 600, s: 22 }); y += 42; };
+  kv('مشتری', c2.name || ''); if (c2.mobile) kv('تلفن', fa(en(c2.mobile))); kv('ویزیتور', (S.name || '') + ' (کد ' + fa(S.code) + ')');
+  y += 4; rr(P, y, W - 2 * P, 44, 10, '#eef1f8'); const hy = y + 22; T('کالا', W - P - 10, hy, { w: 600, s: 20 }); T('تعداد', 420, hy, { w: 600, s: 20, a: 'center' }); T('فی', 270, hy, { w: 600, s: 20, a: 'center' }); T('جمع', P + 10, hy, { w: 600, s: 20, a: 'left' }); y += 44;
+  items.forEach(i => { const h = i.bn ? 74 : 56, cy = y + h / 2; T(i.name, W - P - 10, cy, { s: 22, mw: 230 });
+    if (i.bn) { T(fa(i.bn) + ' ' + i.bu, 420, cy - 11, { s: 21, a: 'center' }); T('(' + fa(i.qty) + ' ' + i.unit + ')', 420, cy + 14, { s: 17, c: '#6a7392', a: 'center' }); } else T(fa(i.qty) + ' ' + i.unit, 420, cy, { s: 21, a: 'center' });
+    const unitP = i.bn ? i.bp : i.price; T(fa(grp(unitP)), 270, cy, { s: 20, a: 'center' }); T(fa(grp(i.total)), P + 10, cy, { s: 21, w: 600, a: 'left' });
+    x.fillStyle = '#e0e5f1'; x.fillRect(P, y + h - 1, W - 2 * P, 1); y += h; });
+  y += 20; const tl = (o.disc ? 1 : 0) + (o.ship ? 1 : 0) + 2, bh = tl * 40 + 24; rr(P, y, W - 2 * P, bh, 18, '#eef1f8'); let ty = y + 32;
+  const tr = (k, v, big) => { T(k, W - P - 18, ty, { s: big ? 26 : 22, w: big ? 700 : 400, c: big ? '#1b2b8c' : '#13183a' }); T(v, P + 18, ty, { s: big ? 26 : 22, w: big ? 700 : 600, a: 'left', c: big ? '#1b2b8c' : '#13183a' }); ty += 40; };
+  tr('جمع کالاها', fa(grp(o.gross || 0)) + ' ' + cu); if (o.disc) tr('تخفیف', '−' + fa(grp(o.disc)) + ' ' + cu); if (o.ship) tr('ارسال', fa(grp(o.ship)) + ' ' + cu); tr('مبلغ قابل پرداخت', fa(grp(o.total || 0)) + ' ' + cu, 1);
+  y += bh + 26; notes.forEach(n => { T(n, W - P, y, { s: 19, c: '#6a7392', mw: W - 2 * P }); y += 36; });
+  y += 14; x.fillStyle = '#cfd6ea'; for (let k = P; k < W - P; k += 14) x.fillRect(k, y, 8, 2); y += 34;
+  T(c.name || '', W - P, y, { s: 21, w: 600 }); const ph = c.phone ? fa(en(c.phone)) : ''; if (ph) T(ph, P, y, { s: 21, a: 'left' });
+  if (c.addr) { y += 34; T(c.addr, W - P, y, { s: 18, c: '#6a7392', mw: W - 2 * P }); }
+  return new Promise(r => cv.toBlob(r, 'image/png'));
+}
+function pfOrder(t) { if (t.dataset.draft) { const d = dr(); return draftOrder('draft', (S.seq || 0) + 1, Date.now()); } return S.orders[t.dataset.id]; }
+A['pf-open'] = async t => {
+  pfO = pfOrder(t); if (!pfO) return; const w = openSheet('<h3 class="st">پیش‌فاکتور</h3><div id="pfpv" class="hint" style="text-align:center">در حال ساخت تصویر…</div><div class="btns" style="margin-top:10px"><button class="btn tap" data-a="pf-img">ارسال تصویر</button><button class="btn ghost tap" data-a="pf-save">ذخیره تصویر</button></div><div class="btns" style="margin-top:8px"><button class="btn ghost tap" data-a="pf-copy">کپی متن</button><button class="btn ghost tap" data-a="pf-sms">پیامک</button><button class="btn ghost tap" data-a="pf-txt">اشتراک متن</button></div><button class="btn ghost tap" style="margin-top:8px" data-a="pf-wa">ارسال متن در واتساپ مشتری</button>');
+  try { const b = await pfImage(pfO); pfO._blob = b; const pv = $('#pfpv', w); if (pv) pv.innerHTML = '<img src="' + URL.createObjectURL(b) + '" style="width:100%;border-radius:14px;border:1px solid var(--line)" alt="">'; } catch (e) { const pv = $('#pfpv', w); if (pv) pv.textContent = 'ساخت تصویر ممکن نشد؛ از حالت متن استفاده کن.'; }
+};
+const pfFile = () => new File([pfO._blob], 'pish-factor-' + (pfO.no || '') + '.png', { type: 'image/png' });
+A['pf-img'] = async () => { if (!pfO || !pfO._blob) return; const f = pfFile(); try { if (navigator.canShare && navigator.canShare({ files: [f] })) return await navigator.share({ files: [f], title: 'پیش‌فاکتور' }); } catch (e) { if (e && e.name === 'AbortError') return; } A['pf-save'](); toast('تصویر ذخیره شد؛ از گالری بفرست'); };
+A['pf-save'] = () => { if (!pfO || !pfO._blob) return; const a = document.createElement('a'); a.href = URL.createObjectURL(pfO._blob); a.download = pfFile().name; document.body.appendChild(a); a.click(); a.remove(); };
+A['pf-copy'] = async () => { try { await navigator.clipboard.writeText(pfText(pfO)); toast('متن کپی شد'); } catch (e) { const ta = document.createElement('textarea'); ta.value = pfText(pfO); document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); toast('متن کپی شد'); } catch (e2) { toast('کپی نشد', 1); } ta.remove(); } };
+A['pf-sms'] = () => { const ph = en((pfO.c || {}).mobile || '').replace(/[^\d+]/g, ''); location.href = 'sms:' + ph + (/iPhone|iPad|iPod/.test(navigator.userAgent) ? '&' : '?') + 'body=' + encodeURIComponent(pfText(pfO)); };
+A['pf-wa'] = () => { let ph = en((pfO.c || {}).mobile || '').replace(/\D/g, ''); if (ph.startsWith('0')) ph = '98' + ph.slice(1); window.open('https://wa.me/' + ph + '?text=' + encodeURIComponent(pfText(pfO)), '_blank'); };
+A['pf-txt'] = async () => { try { if (navigator.share) return await navigator.share({ text: pfText(pfO) }); } catch (e) { if (e && e.name === 'AbortError') return; } A['pf-copy'](); };
+/* -- ۹ امکان بیشتر -- */
+const sub = (title, fn) => { const p = openPage({ title, body: '' }); p.el._redraw = () => fn(p); fn(p); return p; };
+const dayN = n => isoDay(Date.now() + n * 864e5);
+A.fu = () => sub('پیگیری‌ها', p => {
+  const t = today(), ns = S.notes.filter(n => n.follow && !n.done).sort((a, b) => a.follow < b.follow ? -1 : 1);
+  const G = [['عقب‌افتاده', n => n.follow < t], ['امروز', n => n.follow === t], ['فردا', n => n.follow === dayN(1)], ['تا یک هفته', n => n.follow > dayN(1) && n.follow <= dayN(7)], ['بعداً', n => n.follow > dayN(7)]];
+  p.body.innerHTML = G.map(g => { const r = ns.filter(g[1]); return r.length ? '<div class="hdr2"><h3>' + g[0] + ' (' + fa(r.length) + ')</h3></div><div class="list" style="margin-top:6px">' + r.map(n => rowH({ a: 'nview', id: n.id, title: n.name, sub: isoFa(n.follow) + (n.text ? ' • ' + n.text.slice(0, 30) : ''), icon: 'bell', av: g[0] === 'عقب‌افتاده' ? 'red' : '' })).join('') + '</div>' : ''; }).join('') || empty('پیگیری باز نداری', '<div class="hint">در یادداشت، «تاریخ پیگیری» بگذار تا اینجا بیاید.</div>');
+});
+const navUrl = ls => 'https://www.google.com/maps/dir/' + ls.map(c => c.lat + ',' + c.lng).join('/');
+const routeList = () => { if (!S.route || S.route.day !== today()) S.route = { day: today(), keys: [] }; return S.route; };
+A.route = () => sub('مسیر امروز', p => {
+  const r = routeList(), sel = r.keys.map(k => S.cust[k]).filter(c => c && c.lat), rest = Object.entries(S.cust).filter(([k, c]) => c.lat && !r.keys.includes(k));
+  p.body.innerHTML = '<div class="hint" style="margin-top:12px">مشتری‌هایی که موقعیتشان ثبت شده را برای امروز انتخاب کن و ترتیب بده.</div>' +
+    '<div class="btns" style="margin-top:8px"><button class="btn ghost tap" data-a="rt-fu">افزودن پیگیری‌های امروز</button>' + (sel.length ? '<button class="btn tap" data-a="rt-go">شروع مسیر در نقشه</button>' : '') + '</div>' +
+    (sel.length ? '<div class="hdr2"><h3>مسیر امروز (' + fa(sel.length) + ')</h3></div>' + r.keys.map((k, i) => { const c = S.cust[k]; if (!c || !c.lat) return ''; return '<div class="it2"><div class="tx"><b>' + fa(i + 1) + '. ' + esc(c.name) + '</b><small>' + esc(c.address || '') + '</small></div><div style="display:flex;gap:4px"><button class="smallbtn tap" data-a="rt-up" data-id="' + i + '">↑</button><button class="smallbtn tap" data-a="rt-dn" data-id="' + i + '">↓</button><a class="smallbtn" href="' + navUrl([c]) + '" target="_blank" rel="noopener">مسیر</a><button class="smallbtn tap" data-a="rt-rm" data-id="' + i + '">✕</button></div></div>'; }).join('') : '') +
+    '<div class="hdr2"><h3>مشتریان دارای موقعیت</h3></div><div class="list" style="margin-top:6px">' + (rest.map(([k, c]) => rowH({ a: 'rt-add', id: k, title: c.name, sub: c.address || '', icon: 'pin', end: '<b>+</b>' })).join('') || empty('مشتری دیگری با موقعیت نیست', '<div class="hint">هنگام ثبت سفارش یا یادداشت، «ثبت موقعیت» را بزن.</div>')) + '</div>';
+});
+const rtRe = () => { save(); const pg = pages[pages.length - 1]; pg && pg._redraw && pg._redraw(); };
+A['rt-add'] = t => { routeList().keys.push(t.dataset.id); rtRe(); };
+A['rt-rm'] = t => { routeList().keys.splice(+t.dataset.id, 1); rtRe(); };
+A['rt-up'] = t => { const k = routeList().keys, i = +t.dataset.id; if (i > 0) { [k[i - 1], k[i]] = [k[i], k[i - 1]]; rtRe(); } };
+A['rt-dn'] = t => { const k = routeList().keys, i = +t.dataset.id; if (i < k.length - 1) { [k[i + 1], k[i]] = [k[i], k[i + 1]]; rtRe(); } };
+A['rt-fu'] = () => { const r = routeList(); let n = 0; S.notes.filter(x => x.follow && !x.done && x.follow <= today()).forEach(x => { const k = ckey(x.name); if (S.cust[k] && S.cust[k].lat && !r.keys.includes(k)) { r.keys.push(k); n++; } }); toast(n ? fa(n) + ' مشتری اضافه شد' : 'مورد جدیدی با موقعیت نبود'); rtRe(); };
+A['rt-go'] = () => { const ls = routeList().keys.map(k => S.cust[k]).filter(c => c && c.lat); if (ls.length) window.open(navUrl(ls), '_blank'); };
+ui.rg = 'month';
+chipH.rgc = v => { ui.rg = v; const pg = pages[pages.length - 1]; pg && pg._redraw && pg._redraw(); };
+A.rep = () => sub('گزارش من', p => {
+  const now = Date.now(), d0 = new Date(); d0.setHours(0, 0, 0, 0); const m0 = new Date(d0); m0.setDate(1);
+  const from = { today: +d0, week: now - 7 * 864e5, month: +m0, d30: now - 30 * 864e5 }[ui.rg];
+  const os = ordList().filter(o => o.ts >= from && o.status !== 'cancel'), sum = os.reduce((a, o) => a + (o.total || 0), 0), vis = S.notes.filter(n => n.ts >= from).length;
+  const agg = (kf, vf) => { const m = {}; os.forEach(o => kf(o).forEach(([k, v, q]) => { m[k] = m[k] || { k, v: 0, q: 0 }; m[k].v += v; m[k].q += q || 0; })); return Object.values(m).sort((a, b) => b.v - a.v).slice(0, 5); };
+  const tc = agg(o => [[(o.c || {}).name || '؟', o.total || 0]]), tp = agg(o => (o.items || []).map(i => [i.name, i.total || 0, i.qty])), mx = a => Math.max(1, ...a.map(x => x.v));
+  const bar = (a, u) => a.map(x => '<div style="margin-top:8px"><div class="mrow"><span>' + esc(x.k) + '</span><b>' + fa(grp(x.v)) + (u ? ' <small class="mut">(' + qf(x.q) + ' ' + u + ')</small>' : '') + '</b></div><div style="height:6px;border-radius:6px;background:var(--soft)"><div style="height:6px;border-radius:6px;background:var(--accent);width:' + Math.round(x.v / mx(a) * 100) + '%"></div></div></div>').join('') || '<div class="hint">داده‌ای نیست</div>';
+  p.body.innerHTML = '<div style="padding:12px 0 4px">' + chipsH('rgc', [['today', 'امروز'], ['week', '۷ روز'], ['month', 'ماه جاری'], ['d30', '۳۰ روز']], ui.rg) + '</div><div class="boxes g2"><div class="cell"><small>فروش</small><b>' + mu(sum) + '</b></div><div class="cell"><small>تعداد سفارش</small><b>' + fa(os.length) + '</b></div><div class="cell"><small>میانگین هر سفارش</small><b>' + mu(os.length ? sum / os.length : 0) + '</b></div><div class="cell"><small>ویزیت (یادداشت)</small><b>' + fa(vis) + '</b></div></div>' +
+    '<div class="box sec"><b>۵ مشتری برتر</b>' + bar(tc) + '</div><div class="box sec"><b>۵ محصول برتر</b>' + bar(tp, '') + '</div>';
+});
+A.comm = () => sub('پورسانت من', p => {
+  const c = S.vcomm; if (!c) { p.body.innerHTML = empty('هنوز اطلاعاتی نرسیده', '<div class="hint">وقتی مدیر دفتر فروش را آنلاین باز کند، پورسانت اینجا نشان داده می‌شود.</div>'); return; }
+  const b = c.earned - c.paid, K = { commission: 'پورسانت فروش', salary: 'حقوق', return: 'برگشت پورسانت', payment: 'پرداخت به من' };
+  p.body.innerHTML = '<div class="box" style="margin-top:12px"><div class="hint">مانده‌ی حساب من</div><div style="font-size:20px;font-weight:700">' + mu(Math.abs(b)) + ' <small style="font-size:13px">' + (b > 0 ? 'طلب من' : b < 0 ? 'اضافه دریافتی' : 'تسویه') + '</small></div></div><div class="boxes g2" style="margin-top:8px"><div class="cell"><small>جمع درآمد</small><b>' + mu(c.earned) + '</b></div><div class="cell"><small>جمع دریافتی</small><b>' + mu(c.paid) + '</b></div></div>' +
+    '<div class="hdr2"><h3>آخرین ردیف‌ها</h3></div><div class="list" style="margin-top:6px">' + (c.rows || []).map(r => rowH({ a: 'noop', title: (K[r.k] || r.k) + (r.no && r.k === 'commission' ? ' • فاکتور ' + fa(r.no) : ''), sub: fdate(r.ts), icon: 'coin', end: '<b class="' + (r.k === 'payment' ? 'neg' : '') + '">' + fa(grp(Math.abs(r.a))) + '</b>' })).join('') + '</div><div class="hint" style="text-align:center;margin-top:8px">آخرین به‌روزرسانی: ' + fdate(c.at || Date.now()) + ' ' + ftime(c.at || Date.now()) + '</div>';
+});
+A.noop = () => {};
+ui.ia = 30;
+chipH.iac = v => { ui.ia = +v; const pg = pages[pages.length - 1]; pg && pg._redraw && pg._redraw(); };
+A.inact = () => sub('مشتریان بدون سفارش', p => {
+  const now = Date.now(), last = {}; ordList().filter(o => o.status !== 'cancel').forEach(o => { const k = ckey((o.c || {}).name); last[k] = Math.max(last[k] || 0, o.ts); });
+  const rows = Object.entries(S.cust).map(([k, c]) => ({ k, c, d: last[k] ? Math.floor((now - last[k]) / 864e5) : 9999 })).filter(x => x.d >= ui.ia).sort((a, b) => b.d - a.d);
+  p.body.innerHTML = '<div style="padding:12px 0 4px">' + chipsH('iac', [['14', '۱۴ روز'], ['30', '۳۰ روز'], ['60', '۶۰ روز'], ['90', '۹۰ روز']], String(ui.ia)) + '</div><div class="count">' + fa(rows.length) + ' مشتری</div><div class="list">' + (rows.map(x => rowH({ a: 'cview', id: x.k, title: x.c.name, sub: x.c.mobile ? fa(x.c.mobile) : '', icon: 'users', end: '<small class="neg">' + (x.d === 9999 ? 'هرگز سفارش نداده' : fa(x.d) + ' روز پیش') + '</small>' })).join('') || empty('همه فعال‌اند 👌')) + '</div>';
+});
+S.fav = S.fav || {};
+A.fav = t => { S.fav = S.fav || {}; const id = t.dataset.id; if (S.fav[id]) delete S.fav[id]; else S.fav[id] = 1; save(); const pg = pages[pages.length - 1]; pg && pg._redraw && pg._redraw(); };
+A.favs = () => sub('پرسفارش‌ها و علاقه‌مندی‌ها', p => {
+  const cnt = {}; ordList().filter(o => o.status !== 'cancel').forEach(o => (o.items || []).forEach(i => { cnt[i.pid] = (cnt[i.pid] || 0) + 1; }));
+  const top = Object.entries(cnt).filter(([id]) => S.products[id]).sort((a, b) => b[1] - a[1]).slice(0, 12), fv = Object.keys(S.fav || {}).filter(id => S.products[id]);
+  const row = (id, n) => { const x = { ...S.products[id], id }; return '<div class="it2"><div class="tx"><b data-a="pd" data-id="' + id + '">' + (S.fav[id] ? '★ ' : '') + esc(x.name) + '</b><small>' + (n ? fa(n) + ' بار سفارش' : '') + '</small></div><div class="q" style="width:130px">' + ctlH(x) + '</div></div>'; };
+  p.body.innerHTML = (fv.length ? '<div class="hdr2"><h3>★ علاقه‌مندی‌ها</h3></div>' + fv.map(id => row(id, cnt[id])).join('') : '<div class="hint" style="margin-top:12px">در صفحهٔ هر محصول با «★» آن را به علاقه‌مندی‌ها اضافه کن.</div>') + '<div class="hdr2"><h3>پرسفارش‌ترین‌ها</h3></div>' + (top.map(([id, n]) => row(id, n)).join('') || '<div class="hint">هنوز سفارشی ثبت نشده.</div>');
+});
+S.set = S.set || { theme: 'auto', fs: 'm' };
+function applySet() { const t = (S.set || {}).theme || 'auto', r = document.documentElement; if (t === 'auto') r.removeAttribute('data-theme'); else r.setAttribute('data-theme', t); document.body.style.fontSize = ({ s: '13.5px', m: '15px', l: '17px' })[(S.set || {}).fs || 'm']; }
+chipH.thm = v => { S.set.theme = v; save(); applySet(); }; chipH.fsz = v => { S.set.fs = v; save(); applySet(); };
+A.setg = () => sub('تنظیمات', p => { S.set = S.set || { theme: 'auto', fs: 'm' };
+  p.body.innerHTML = '<div class="box sec"><b>ظاهر</b><div class="f"><label>تم</label><div style="padding-top:8px">' + chipsH('thm', [['auto', 'خودکار'], ['light', 'روشن'], ['dark', 'تیره']], S.set.theme) + '</div></div><div class="f"><label>اندازهٔ نوشته</label><div style="padding-top:8px">' + chipsH('fsz', [['s', 'کوچک'], ['m', 'متوسط'], ['l', 'بزرگ']], S.set.fs) + '</div></div></div>' +
+    '<div class="box sec"><b>حافظهٔ موقت</b><div class="hint">اگر نسخهٔ جدید اپ نمی‌آید، این را بزن. اطلاعات و سفارش‌هایت پاک نمی‌شود.</div><button class="btn ghost tap" style="margin-top:8px" data-a="clr">پاک‌کردن حافظهٔ موقت و بارگذاری دوباره</button></div><div class="hint" style="text-align:center;margin-top:12px">نسخهٔ اپ: ۲</div>';
+});
+A.clr = async () => { try { for (const k of await caches.keys()) await caches.delete(k); const rg = await navigator.serviceWorker.getRegistrations(); for (const r of rg) await r.unregister(); } catch (e) {} location.reload(); };
+A.bk = () => sub('پشتیبان‌گیری', p => {
+  p.body.innerHTML = '<div class="hint" style="margin-top:12px">یادداشت‌ها، مشتریان، سطل زباله و علاقه‌مندی‌ها در یک فایل ذخیره می‌شود. (سفارش‌ها روی سرور هستند.) اگر آنلاین باشی، خودکار هم پشتیبان ابری گرفته می‌شود.</div><button class="btn tap" style="margin-top:12px" data-a="bk-out">دانلود فایل پشتیبان</button><button class="btn ghost tap" style="margin-top:8px" data-a="bk-in">بازیابی از فایل</button><input type="file" id="bkf" accept=".json,application/json" hidden>';
+});
+A['bk-out'] = () => { const d = { app: 'sefaresh', v: 1, at: Date.now(), code: S.code, notes: S.notes, cust: S.cust, trash: S.trash, hidden: S.hidden, fav: S.fav, me: S.me }; const b = new Blob([JSON.stringify(d)], { type: 'application/json' }), a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'sefaresh-backup-' + isoDay(Date.now()) + '.json'; document.body.appendChild(a); a.click(); a.remove(); toast('فایل پشتیبان ساخته شد'); };
+A['bk-in'] = () => { const f = $('#bkf'); f.onchange = async () => { const file = f.files[0]; if (!file) return; try { const d = JSON.parse(await file.text()); if (d.app !== 'sefaresh') throw 0; ask('اطلاعات فعلی با فایل ادغام شود؟', 'ادغام', () => { const ids = new Set(S.notes.map(n => n.id)); (d.notes || []).forEach(n => { if (!ids.has(n.id)) S.notes.push(n); }); S.cust = { ...(d.cust || {}), ...S.cust }; S.fav = { ...(d.fav || {}), ...S.fav }; S.hidden = { ...(d.hidden || {}), ...S.hidden }; const tids = new Set(S.trash.map(x => x.tid)); (d.trash || []).forEach(x => { if (!tids.has(x.tid)) S.trash.push(x); }); S.me = S.me || d.me; save(); backup(); toast('بازیابی شد'); }); } catch (e) { toast('فایل معتبر نیست.', 1); } }; f.click(); };
 const VIEWS = { prod: tabProd, ord: tabOrd, note: tabNote, cust: tabCust, orders: tabOrders, me: tabMe };
 /* ---- شروع ---- */
 (async function () {
-  const s = await kvGet('s'); if (s && s.v) S = { ...newS(), ...s }; ready = true; purgeTrash(); render();
+  const s = await kvGet('s'); if (s && s.v) S = { ...newS(), ...s }; ready = true; purgeTrash(); applySet(); render();
   if (S.uid && online() && BRAND.fb) fbInit().catch(() => {});
   setInterval(() => { if (S.pending.length) flush(); }, 20000);
   window.__sf = { get S() { return S; }, render, get fb() { return fb; } };
