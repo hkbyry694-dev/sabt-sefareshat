@@ -372,6 +372,7 @@ nav.bar button{transition:background-color .25s,color .25s}
 .btn{transition:transform .12s,background-color .2s,box-shadow .2s}
 .btn:active{transform:scale(.97)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+a.btn{text-decoration:none}a.smallbtn{text-decoration:none}
 .top{padding-top:calc(14px + env(safe-area-inset-top,0px))}</style></head><body><div id="app"><main id="main"></main><nav class="bar" id="nav" aria-label="بخش‌های اصلی"></nav></div><div id="pages"></div><div id="sheets"></div><script>
 const BRAND={"icon": "data:image/png;base64,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", "fb": {"apiKey": "AIzaSyCukzk8AarBkttVoIVSmSuNhgoDZWjjsfQ", "authDomain": "daftar-foroush-1e5be.firebaseapp.com", "projectId": "daftar-foroush-1e5be", "storageBucket": "daftar-foroush-1e5be.firebasestorage.app", "messagingSenderId": "940325183562", "appId": "1:940325183562:web:e613ec09311f479a8186b3", "measurementId": "G-N2NR7HBF2H"}};
 document.documentElement.dir = 'rtl'; document.documentElement.lang = 'fa';
@@ -465,18 +466,31 @@ const mu = n => fa(grp(n)) + ' ' + cur();
 /* ---- Firebase ---- */
 const CFG = BRAND.fb, FBV = '10.12.2', FBU = m => 'https://www.gstatic.com/firebasejs/' + FBV + '/firebase-' + m + '.js';
 let fb = null, authReady = false, user = null, unsubs = [], net = { gate: null };
-async function fbInit() {
-  if (fb) return fb;
-  const [app, auth, fs] = await Promise.all([import(FBU('app')), import(FBU('auth')), import(FBU('firestore'))]);
-  const a = app.initializeApp(CFG); fb = { auth, fs, au: auth.getAuth(a), db: fs.getFirestore(a) };
-  auth.onAuthStateChanged(fb.au, u => { user = u; authReady = true; if (u && S.code) { S.uid = u.uid; save(); startWatch(); flush(); } else if (!u && S.uid) { S.uid = ''; save(); stopWatch(); } else return; render(); });
-  return fb;
+let fbP = null;
+const imp = async m => { let e0; for (let i = 0; i < 3; i++) { try { return await import(FBU(m)); } catch (e) { e0 = e; await new Promise(r => setTimeout(r, 700 * (i + 1))); } } const e = new Error('SDK:' + m); e.code = 'sdk-load'; e.cause = e0; throw e; };
+function fbInit() {
+  if (fb) return Promise.resolve(fb); if (fbP) return fbP;
+  fbP = (async () => {
+    const [app, auth, fs] = await Promise.all([imp('app'), imp('auth'), imp('firestore')]);
+    const a = app.initializeApp(CFG); const f = { auth, fs, au: auth.getAuth(a), db: fs.getFirestore(a) };
+    auth.onAuthStateChanged(f.au, u => { user = u; authReady = true; if (u && S.code) { S.uid = u.uid; save(); startWatch(); flush(); } else if (!u && S.uid) { S.uid = ''; save(); stopWatch(); } else return; render(); });
+    fb = f; return f;
+  })();
+  fbP.catch(() => { fbP = null; });
+  return fbP;
 }
 const online = () => navigator.onLine !== false;
 const normCode = s => { const d = en(String(s || '')).replace(/\D/g, ''); return d ? d.padStart(5, '0').slice(-5) : ''; };
 const mail = code => 'v' + code + '@visitor.app';
-const errFa = e => { const c = (e && (e.code || e.message)) || ''; const m = { 'auth/invalid-credential': 'کد یا رمز اشتباه است.', 'auth/wrong-password': 'رمز اشتباه است.', 'auth/user-not-found': 'برای این کد هنوز رمز ساخته نشده؛ «اولین ورود» را بزن.', 'auth/email-already-in-use': 'این کد قبلاً فعال شده؛ با رمزت وارد شو.', 'auth/weak-password': 'رمز باید دست‌کم ۶ نویسه باشد.', 'auth/network-request-failed': 'اینترنت وصل نیست.', 'auth/too-many-requests': 'تلاش زیاد؛ چند دقیقه بعد دوباره.', 'permission-denied': 'اجازهٔ دسترسی نیست.' }; return m[c] || ('خطا: ' + c); };
-function stopWatch() { watching = false; unsubs.forEach(f => { try { f(); } catch (e) {} }); unsubs = []; }
+const errFa = e => { const c = (e && (e.code || e.message)) || ''; if (c === 'sdk-load') return 'اتصال به سرویس ابری برقرار نشد (بارگذاری Firebase). اینترنت یا فیلترشکن را بررسی کن و دوباره بزن. اگر فقط با فیلترشکن باز می‌شود، آن را روشن بگذار.'; const m = { 'auth/invalid-credential': 'کد یا رمز اشتباه است.', 'auth/wrong-password': 'رمز اشتباه است.', 'auth/user-not-found': 'برای این کد هنوز رمز ساخته نشده؛ «اولین ورود» را بزن.', 'auth/email-already-in-use': 'این کد قبلاً فعال شده؛ با رمزت وارد شو.', 'auth/weak-password': 'رمز باید دست‌کم ۶ نویسه باشد.', 'auth/network-request-failed': 'اینترنت وصل نیست.', 'auth/too-many-requests': 'تلاش زیاد؛ چند دقیقه بعد دوباره.', 'permission-denied': 'اجازهٔ دسترسی نیست.' }; return m[c] || ('خطا: ' + c); };
+function stopWatch() { watching = false; if (rtUn) { try { rtUn(); } catch (e) {} rtUn = null; rtKey = ''; } unsubs.forEach(f => { try { f(); } catch (e) {} }); unsubs = []; }
+function vDay() { const p = {}; new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Tehran', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(new Date(Date.now() - 6 * 36e5)).forEach(x => { p[x.type] = x.value; }); return p.year + '-' + p.month + '-' + p.day; }
+let rtUn = null, rtKey = '';
+function watchRoute() {
+  if (!fb || !user || !S.code) return; const day = vDay(), key = day + '_' + S.code; if (key === rtKey && rtUn) return; if (rtUn) { try { rtUn(); } catch (e) {} } rtKey = key;
+  rtUn = fb.fs.onSnapshot(fb.fs.doc(fb.db, 'routes', key), d => { if (d.exists()) { const x = d.data(); S.route2 = { day, stops: x.stops || [], regions: x.regions || [], done: x.done || {} }; } else if (S.route2 && S.route2.day !== day) S.route2 = null; else if (!S.route2 || S.route2.day !== day) S.route2 = { day, stops: [], regions: [], done: {}, none: true }; save(); renderKeep(); }, () => {});
+}
+setInterval(() => { if (fb && user && rtKey && rtKey.split('_')[0] !== vDay()) { S.route2 = null; watchRoute(); } }, 60000);
 let watching = false; const dg = { pn: null, pe: '', gate: '' };
 async function startWatch() {
   if (!fb || !user || watching) return; watching = true; const { fs, db } = fb, code = S.code;
@@ -491,6 +505,7 @@ async function startWatch() {
     unsubs.push(fs.onSnapshot(fs.doc(db, 'config', 'app'), d => { if (d.exists()) { S.cfg = { ...S.cfg, ...d.data() }; save(); renderKeep(); } }, () => {}));
     unsubs.push(fs.onSnapshot(fs.query(fs.collection(db, 'preorders'), fs.where('visitorUid', '==', user.uid)), snap => { snap.forEach(d => { S.orders[d.id] = { ...(S.orders[d.id] || {}), ...d.data(), id: d.id }; if (S.pending.includes(d.id)) S.pending = S.pending.filter(x => x !== d.id); }); save(); renderKeep(); }, () => {}));
   } catch (e) {}
+  watchRoute();
   if (!S.notes.length && !Object.keys(S.cust).length) { try { const b = await fs.getDoc(fs.doc(db, 'vdata', code, 'b', 'main')); if (b.exists()) { S.notes = b.data().notes || []; S.cust = b.data().cust || {}; S.trash = b.data().trash || []; S.hidden = b.data().hidden || {}; save(); renderKeep(); } } catch (e) {} }
 }
 async function flush() {
@@ -503,7 +518,9 @@ async function flush() {
       catch (e) { try { const g = await fs.getDoc(fs.doc(db, 'preorders', id)); if (g.exists()) S.pending = S.pending.filter(x => x !== id); else throw e; } catch (e2) { toast('ارسال سفارش ممکن نشد: ' + errFa(e2), 1); break; } }
     }
   } finally { flush.busy = false; save(); renderKeep(); }
+  flushRoute();
 }
+async function flushRoute() { if (!fb || !user || !S.rtdirty) return; const day = S.rtdirty; try { await fb.fs.updateDoc(fb.fs.doc(fb.db, 'routes', day + '_' + S.code), { done: (S.rtdone || {})[day] || {}, doneAt: Date.now() }); S.rtdirty = ''; save(); } catch (e) {} }
 let bkT = 0; function backup() { clearTimeout(bkT); bkT = setTimeout(async () => { if (!fb || !user || !online()) return; try { await fb.fs.setDoc(fb.fs.doc(fb.db, 'vdata', S.code, 'b', 'main'), { notes: S.notes, cust: S.cust, trash: S.trash, hidden: S.hidden, at: Date.now() }); } catch (e) {} }, 2500); }
 addEventListener('online', () => { flush(); render(); }); addEventListener('offline', () => render());
 /* ---- ورود ---- */
@@ -513,20 +530,26 @@ function loginView() {
   return '<div class="loginw"><div class="lg0"><img src="' + BRAND.icon + '" alt=""><h1>دفتر ثبت سفارشات</h1><div class="hint">' + (first ? 'کدی که مدیر داده را بزن و برای خودت رمز بساز.' : 'با کد ویزیتور و رمزت وارد شو.') + '</div></div>' +
     field('کد ویزیتور', 'lc', '', { ph: '#00001', attr: 'inputmode="numeric" dir="ltr" style="text-align:center"' }) + field(first ? 'رمز جدید (دست‌کم ۶ نویسه)' : 'رمز', 'lp', '', { type: 'password', attr: 'dir="ltr"' }) + (first ? field('تکرار رمز', 'lp2', '', { type: 'password', attr: 'dir="ltr"' }) : '') +
     '<div id="lmsg" class="warn-note" hidden style="margin-top:12px"></div><button class="btn tap" style="margin-top:16px" data-a="' + (first ? 'lg-first' : 'lg-in') + '">' + (first ? 'ساخت رمز و ورود' : 'ورود') + '</button>' +
-    '<button class="btn ghost tap" style="margin-top:10px" data-a="lg-mode">' + (first ? 'قبلاً رمز ساخته‌ام' : 'اولین ورود (ساخت رمز)') + '</button></div>';
+    '<button class="btn ghost tap" style="margin-top:10px" data-a="lg-test">آزمایش اتصال</button><button class="btn ghost tap" style="margin-top:10px" data-a="lg-mode">' + (first ? 'قبلاً رمز ساخته‌ام' : 'اولین ورود (ساخت رمز)') + '</button></div>';
 }
 const lgErr = m => { const b = $('#lmsg'); if (b) { b.textContent = m; b.hidden = !m; } };
 A['lg-mode'] = () => { lgMode = lgMode === 'in' ? 'first' : 'in'; render(); };
 async function afterLogin(code, u) { S = { ...newS(), ...(S.code === code ? S : {}), code, uid: u.uid }; save(); render(); startWatch(); flush(); }
+A['lg-test'] = async () => {
+  const out = []; const say = () => lgErr(out.join('\n')); $('#lmsg').style.whiteSpace = 'pre-line'; out.push('اینترنت مرورگر: ' + (navigator.onLine ? 'وصل' : 'قطع')); say();
+  for (const m of ['app', 'auth', 'firestore']) { try { await import(FBU(m)); out.push('✓ بارگذاری ' + m); } catch (e) { out.push('✗ بارگذاری ' + m + ' ناموفق (سایت gstatic.com باز نمی‌شود)'); } say(); }
+  try { const r = await fetch('https://identitytoolkit.googleapis.com/', { mode: 'no-cors' }); out.push('✓ سرور ورود (googleapis) در دسترس'); } catch (e) { out.push('✗ سرور ورود (googleapis.com) در دسترس نیست'); } say();
+  try { await fetch('https://firestore.googleapis.com/', { mode: 'no-cors' }); out.push('✓ سرور دیتابیس در دسترس'); } catch (e) { out.push('✗ سرور دیتابیس (firestore.googleapis.com) در دسترس نیست'); } say();
+};
 A['lg-in'] = async () => {
   const code = normCode($('#lc').value), pw = $('#lp').value; if (!code || !pw) return lgErr('کد و رمز را وارد کن.');
-  if (!online()) return lgErr('برای اولین ورود اینترنت لازم است.'); lgErr('در حال ورود…');
-  try { const f = await fbInit(); const r = await f.auth.signInWithEmailAndPassword(f.au, mail(code), pw); await afterLogin(code, r.user); lgErr(''); } catch (e) { lgErr(errFa(e)); }
+  lgErr('در حال ورود…');
+  try { const f = await fbInit(); const r = await f.auth.signInWithEmailAndPassword(f.au, mail(code), pw); await afterLogin(code, r.user); lgErr(''); } catch (e) { lgErr(errFa(e) + (e && e.code ? ' [' + e.code + ']' : '')); }
 };
 A['lg-first'] = async () => {
   const code = normCode($('#lc').value), p1 = $('#lp').value, p2 = $('#lp2').value; if (!code) return lgErr('کد را وارد کن.');
   if (p1.length < 6) return lgErr('رمز باید دست‌کم ۶ نویسه باشد.'); if (p1 !== p2) return lgErr('تکرار رمز یکسان نیست.');
-  if (!online()) return lgErr('اینترنت لازم است.'); lgErr('در حال بررسی…');
+  lgErr('در حال بررسی…');
   try {
     const f = await fbInit(), g = await f.fs.getDoc(f.fs.doc(f.db, 'visitorGate', code));
     if (!g.exists()) return lgErr('این کد پیدا نشد. از مدیر بخواه کاتالوگ را منتشر کند.');
@@ -673,7 +696,7 @@ function draftOrder(id, no, ts) {
 }
 A['ord-send'] = () => {
   const d = dr(); closeSheet(); S.seq = (S.seq || 0) + 1; const o = draftOrder(S.code + '-' + uid(), S.seq, Date.now());
-  S.orders[o.id] = o; S.pending.push(o.id); upCust(o.c, o.ts); S.cart = {}; S.draft = {}; save(); ui.tab = 'orders'; render(); toast(online() ? 'سفارش ثبت شد' : 'سفارش ذخیره شد؛ با اتصال اینترنت ارسال می‌شود'); flush();
+  S.orders[o.id] = o; S.pending.push(o.id); upCust(o.c, o.ts); if (d.stopId) vrMark(d.stopId, 'order', { ord: o.id }); S.cart = {}; S.draft = {}; save(); ui.tab = 'orders'; render(); toast(online() ? 'سفارش ثبت شد' : 'سفارش ذخیره شد؛ با اتصال اینترنت ارسال می‌شود'); flush();
 };
 /* -- سفارشات -- */
 const ST = { new: 'جدید', confirmed: 'تأیید شد', invoiced: 'فاکتور شد', shipped: 'ارسال شد', cancel: 'لغو شد' };
@@ -777,7 +800,7 @@ A.more = () => {
   const p = openPage({ title: 'بیشتر', body: '' });
   p.el._redraw = () => { purgeTrash(); const fu = S.notes.filter(n => n.follow && !n.done && n.follow <= today()).length;
     const R = (a, t, sub, ic, end) => rowH({ a, title: t, sub, icon: ic, end: end || '' });
-    p.body.innerHTML = '<div class="list" style="margin-top:12px">' + R('fu', 'پیگیری‌ها', 'مشتریانی که باید بهشان سر بزنی', 'bell', fu ? '<b class="neg">' + fa(fu) + '</b>' : '') + R('route', 'مسیر امروز', 'انتخاب مشتری‌ها و مسیر در نقشه', 'route') + R('rep', 'گزارش من', 'روزانه، هفتگی، ماهانه و برترین‌ها', 'chart') + R('comm', 'پورسانت من', 'درآمد و پرداخت‌ها', 'coin') + R('inact', 'مشتریان بدون سفارش', 'کسانی که مدتی سفارش نداده‌اند', 'users') + R('favs', 'پرسفارش‌ها و علاقه‌مندی‌ها', 'میان‌بر به محصولات همیشگی', 'star') + R('trash', 'سطل زباله', 'موارد حذف‌شده تا ۳۰ روز', 'trash', S.trash.length ? '<b>' + fa(S.trash.length) + '</b>' : '') + R('setg', 'تنظیمات', 'تم، اندازهٔ نوشته، پاک‌کردن حافظهٔ موقت', 'gear') + R('diag', 'عیب‌یابی اتصال', 'اگر کاتالوگ یا سفارش‌ها نمی‌آید', 'cloud') + R('bk', 'پشتیبان‌گیری', 'ذخیره و بازیابی یادداشت‌ها و مشتریان', 'cloud') + '</div>'; }; p.el._redraw();
+    p.body.innerHTML = '<div class="list" style="margin-top:12px">' + R('vr', 'مسیر ویزیت امروز', S.route2 && S.route2.day === vDay() && S.route2.stops.length ? fa(S.route2.stops.length) + ' فروشگاه برای امروز' : 'برنامهٔ روزانه از طرف مدیر', 'pin', vrLeft() ? '<b class="neg">' + fa(vrLeft()) + '</b>' : '') + R('fu', 'پیگیری‌ها', 'مشتریانی که باید بهشان سر بزنی', 'bell', fu ? '<b class="neg">' + fa(fu) + '</b>' : '') + R('route', 'مسیر امروز', 'انتخاب مشتری‌ها و مسیر در نقشه', 'route') + R('rep', 'گزارش من', 'روزانه، هفتگی، ماهانه و برترین‌ها', 'chart') + R('comm', 'پورسانت من', 'درآمد و پرداخت‌ها', 'coin') + R('inact', 'مشتریان بدون سفارش', 'کسانی که مدتی سفارش نداده‌اند', 'users') + R('favs', 'پرسفارش‌ها و علاقه‌مندی‌ها', 'میان‌بر به محصولات همیشگی', 'star') + R('trash', 'سطل زباله', 'موارد حذف‌شده تا ۳۰ روز', 'trash', S.trash.length ? '<b>' + fa(S.trash.length) + '</b>' : '') + R('setg', 'تنظیمات', 'تم، اندازهٔ نوشته، پاک‌کردن حافظهٔ موقت', 'gear') + R('diag', 'عیب‌یابی اتصال', 'اگر کاتالوگ یا سفارش‌ها نمی‌آید', 'cloud') + R('bk', 'پشتیبان‌گیری', 'ذخیره و بازیابی یادداشت‌ها و مشتریان', 'cloud') + '</div>'; }; p.el._redraw();
 };
 A.trash = () => {
   const p = openPage({ title: 'سطل زباله', body: '' });
@@ -855,6 +878,23 @@ A['pf-copy'] = async () => { try { await navigator.clipboard.writeText(pfText(pf
 A['pf-sms'] = () => { const ph = en((pfO.c || {}).mobile || '').replace(/[^\d+]/g, ''); location.href = 'sms:' + ph + (/iPhone|iPad|iPod/.test(navigator.userAgent) ? '&' : '?') + 'body=' + encodeURIComponent(pfText(pfO)); };
 A['pf-wa'] = () => { let ph = en((pfO.c || {}).mobile || '').replace(/\D/g, ''); if (ph.startsWith('0')) ph = '98' + ph.slice(1); window.open('https://wa.me/' + ph + '?text=' + encodeURIComponent(pfText(pfO)), '_blank'); };
 A['pf-txt'] = async () => { try { if (navigator.share) return await navigator.share({ text: pfText(pfO) }); } catch (e) { if (e && e.name === 'AbortError') return; } A['pf-copy'](); };
+/* -- مسیر ویزیت روزانه -- */
+const vrDoneMap = () => { const d = vDay(); S.rtdone = S.rtdone || {}; S.rtdone[d] = { ...((S.route2 && S.route2.day === d ? S.route2.done : {}) || {}), ...(S.rtdone[d] || {}) }; return S.rtdone[d]; };
+const vrLeft = () => { const r = S.route2; if (!r || r.day !== vDay()) return 0; const dn = vrDoneMap(); return r.stops.filter(s => !dn[s.id]).length; };
+function vrMark(id, res, extra) { const dn = vrDoneMap(); if (res) dn[id] = { ts: Date.now(), res, ...(extra || {}) }; else delete dn[id]; S.rtdirty = vDay(); save(); flushRoute(); const s = (S.route2 && S.route2.stops.find(x => x.id === id)); if (s && res) upCust({ name: s.name, mobile: s.tel || '', address: s.addr || s.rn || '', lat: s.lat, lng: s.lng }, Date.now()); }
+const VRES = { visited: 'بازدید شد', order: 'سفارش گرفتم', closed: 'بسته بود', no: 'علاقه‌ای نداشت' };
+A.vr = () => sub('مسیر ویزیت امروز', p => {
+  const r = S.route2; if (!r || r.day !== vDay() || !r.stops.length) { p.body.innerHTML = empty('برای امروز مسیری تعیین نشده', '<div class="hint">مدیر مسیر هر روز را قبل از ساعت ۶ صبح مشخص می‌کند. اگر انتظار داشتی ببینی، اینترنت را وصل کن و «به‌روزرسانی» را در پروفایل بزن.</div>'); return; }
+  const dn = vrDoneMap(), tot = r.stops.length, done = r.stops.filter(s => dn[s.id]).length, next = r.stops.filter(s => !dn[s.id]).slice(0, 9);
+  p.body.innerHTML = '<div class="box" style="margin-top:12px"><div class="mrow"><b>' + fa(done) + ' از ' + fa(tot) + ' فروشگاه</b><span class="pill">' + fa(r.stops.filter(s => (dn[s.id] || {}).res === 'order').length) + ' سفارش</span></div><div style="height:6px;border-radius:6px;background:var(--soft);margin-top:8px"><div style="height:6px;border-radius:6px;background:var(--accent);width:' + Math.round(done / tot * 100) + '%"></div></div>' + (r.regions.length ? '<div class="hint">مناطق امروز: ' + r.regions.map(esc).join('، ') + '</div>' : '') + '</div>' +
+    (next.length ? '<a class="btn tap" style="margin-top:10px" href="' + navUrl(next) + '" target="_blank" rel="noopener">' + ico('route', 18) + 'شروع مسیر در نقشه (' + fa(next.length) + ' مقصد بعدی)</a>' : '<div class="ok-note">همهٔ فروشگاه‌ها تمام شد. خسته نباشی! 🎉</div>') +
+    r.stops.map((s, i) => { const d = dn[s.id]; return '<div class="box" style="margin-top:8px' + (d ? ';opacity:.78' : '') + '"><div class="mrow"><b>' + fa(i + 1) + '. ' + esc(s.name) + '</b>' + (d ? '<span class="pill ' + (d.res === 'order' ? 'invoiced' : d.res === 'visited' ? 'confirmed' : 'cancel') + '">' + VRES[d.res] + '</span>' : '') + '</div><div class="hint">' + esc(s.type || '') + (s.rn ? ' • ' + esc(s.rn) : '') + (s.addr ? ' • ' + esc(s.addr) : '') + '</div>' + (s.tel ? '<div class="hint"><a href="tel:' + esc(s.tel) + '" dir="ltr" style="color:var(--accent)">' + esc(s.tel) + '</a></div>' : '') +
+      '<div class="btns" style="margin-top:8px"><a class="btn ghost tap" style="padding:9px" href="' + navUrl([s]) + '" target="_blank" rel="noopener">مسیر</a>' + (d ? '<button class="btn ghost tap" style="padding:9px" data-a="vs-undo" data-id="' + esc(s.id) + '">بازگرداندن</button>' : '<button class="btn tap" style="padding:9px" data-a="vs-ord" data-id="' + esc(s.id) + '">ثبت سفارش</button>') + '</div>' +
+      (d ? '' : '<div class="btns" style="margin-top:6px"><button class="btn ghost tap" style="padding:9px" data-a="vs-do" data-id="' + esc(s.id) + '" data-r="visited">بازدید شد</button><button class="btn ghost tap" style="padding:9px" data-a="vs-do" data-id="' + esc(s.id) + '" data-r="closed">بسته بود</button><button class="btn ghost tap" style="padding:9px" data-a="vs-do" data-id="' + esc(s.id) + '" data-r="no">علاقه‌ای نداشت</button></div>') + '</div>'; }).join('');
+});
+A['vs-do'] = t => { vrMark(t.dataset.id, t.dataset.r); const pg = pages[pages.length - 1]; pg && pg._redraw && pg._redraw(); toast('ثبت شد'); };
+A['vs-undo'] = t => { vrMark(t.dataset.id, ''); const pg = pages[pages.length - 1]; pg && pg._redraw && pg._redraw(); };
+A['vs-ord'] = t => { const s = S.route2.stops.find(x => x.id === t.dataset.id); if (!s) return; S.cart = S.cart || {}; S.draft = { name: s.name, mobile: s.tel || '', address: s.addr || s.rn || '', lat: s.lat, lng: s.lng, stopId: s.id }; save(); A['go-ord'](); };
 /* -- ۹ امکان بیشتر -- */
 const sub = (title, fn) => { const p = openPage({ title, body: '' }); p.el._redraw = () => fn(p); fn(p); return p; };
 const dayN = n => isoDay(Date.now() + n * 864e5);
