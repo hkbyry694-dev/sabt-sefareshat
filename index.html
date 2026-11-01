@@ -375,10 +375,13 @@ nav.bar button{transition:background-color .25s,color .25s}
 a.btn{text-decoration:none}a.smallbtn{text-decoration:none}
 
 /* ---- راهنمای من ---- */
-#asfab{position:fixed;left:max(12px,env(safe-area-inset-left,0px));bottom:calc(88px + env(safe-area-inset-bottom,0px));z-index:51;height:52px;min-width:52px;padding:0 13px;border-radius:26px;background:linear-gradient(135deg,var(--accent),#7a5cff);color:#fff;display:flex;align-items:center;gap:8px;box-shadow:0 8px 22px rgba(30,40,140,.38);animation:asin .6s cubic-bezier(.2,.9,.25,1);transition:bottom .3s,transform .2s,opacity .2s;overflow:visible;font-size:13.5px;font-weight:600}
-#asfab::after{content:"";position:absolute;inset:-4px;border-radius:30px;border:2px solid var(--accent);opacity:0;animation:aspulse 2.8s ease-out infinite;pointer-events:none}
-#asfab .aslb{max-width:110px;overflow:hidden;white-space:nowrap;transition:max-width .5s,opacity .4s}
-#asfab.short .aslb{max-width:0;opacity:0}#asfab.short{padding:0;width:52px;justify-content:center}
+#asfab{position:fixed;left:max(12px,env(safe-area-inset-left,0px));bottom:calc(88px + env(safe-area-inset-bottom,0px));z-index:51;height:52px;width:150px;padding:0;border-radius:26px;background:linear-gradient(135deg,var(--accent),#7a5cff);color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 8px 22px rgba(30,40,140,.38);animation:asin .6s cubic-bezier(.2,.9,.25,1);transition:width .7s cubic-bezier(.65,0,.25,1),gap .5s ease .1s,bottom .3s,transform .25s,opacity .25s;overflow:visible;font-size:13.5px;font-weight:600}
+#asfab::after{content:"";position:absolute;inset:-4px;border-radius:32px;border:2px solid var(--accent);opacity:0;animation:aspulse 2.8s ease-out infinite;pointer-events:none}
+#asfab .asic{width:28px;height:28px;flex:none;display:grid;place-items:center;animation:asrot 5s cubic-bezier(.6,0,.3,1) infinite}
+#asfab .asic svg{display:block;width:28px;height:28px;margin:0}
+#asfab .aslb{flex:none;max-width:90px;overflow:hidden;white-space:nowrap;transition:max-width .6s cubic-bezier(.65,0,.25,1),opacity .3s ease}
+#asfab.short{width:52px;gap:0}#asfab.short .aslb{max-width:0;opacity:0}
+@keyframes asrot{0%{transform:rotate(0)}55%,100%{transform:rotate(360deg)}}
 body:has(.cartbar) #asfab{bottom:calc(150px + env(safe-area-inset-bottom,0px))}
 body.aso #asfab,#sheets:has(.sw)~#asfab{opacity:0;pointer-events:none;transform:scale(.6)}
 @keyframes asin{from{opacity:0;transform:translateY(30px) scale(.6)}to{opacity:1;transform:none}}
@@ -1219,7 +1222,7 @@ A['as-send'] = () => { const i = $('#asq'); const q = (i.value || '').trim(); if
 A['as-q'] = t => asReply(t.dataset.q, t.textContent);
 A['as-go'] = t => { const f = GOF[t.dataset.k]; asClose(); if (f) setTimeout(f, 120); };
 document.addEventListener('keydown', e => { if (e.target && e.target.id === 'asq' && e.key === 'Enter') { e.preventDefault(); A['as-send'](); } });
-(function () { const b = document.createElement('button'); b.id = 'asfab'; b.className = 'tap'; b.setAttribute('data-a', 'as-open'); b.setAttribute('aria-label', 'راهنمای من'); b.innerHTML = ico('bot', 26) + '<span class="aslb">راهنمای من</span>'; document.body.appendChild(b); setTimeout(() => b.classList.add('short'), 4500); })();
+(function () { const b = document.createElement('button'); b.id = 'asfab'; b.className = 'tap'; b.setAttribute('data-a', 'as-open'); b.setAttribute('aria-label', 'راهنمای من'); b.innerHTML = '<span class="asic">' + ico('bot', 28) + '</span><span class="aslb">راهنمای من</span>'; document.body.appendChild(b); setTimeout(() => b.classList.add('short'), 4500); })();
 const VIEWS = { prod: tabProd, ord: tabOrd, note: tabNote, cust: tabCust, orders: tabOrders, me: tabMe };
 /* ---- شروع ---- */
 (async function () {
