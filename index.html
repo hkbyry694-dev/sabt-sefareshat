@@ -20,7 +20,7 @@
   --sale:#6e1220;--buy:#0d4f29;--s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;color-scheme:dark}
 
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{height:100%}
+html{background:var(--card)}html,body{height:100%}
 body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);font-size:15px;line-height:1.6;
   padding-left:0;padding-right:0;overscroll-behavior:none}
 button,input,select,textarea{font:inherit;color:inherit}
@@ -38,7 +38,7 @@ button{border:0;background:none;cursor:pointer;padding:0}
 .tap:active .chipx,.tap.on .chipx{background:rgba(255,255,255,.2)!important}
 
 /* سرتیتر */
-.top{background:var(--head);color:#fff;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-top:14px;padding-bottom:14px;border-radius:0 0 26px 26px}
+.top{background:var(--head);color:#fff;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-top:max(14px,env(safe-area-inset-top,0px));padding-bottom:14px;border-radius:0 0 26px 26px}
 .top h1{margin:0;font-size:19px;font-weight:700}
 .top .sub{opacity:.8;font-size:13px}
 .ledger-pick{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.14);color:#fff;border-radius:var(--r);padding:10px 14px;width:100%;text-align:right}
@@ -658,7 +658,7 @@ A.pd = t => {
   const id = t.dataset.id; const p = openPage({ title: '', body: '', foot: '<button class="btn tap" data-a="pclose">بازگشت به محصولات</button>' }); p.el._id = id;
   p.el._redraw = () => { const x = S.products[id]; if (!x) return p.close(); const c = S.cart[id] || { n: 0, u: 'b' }, big = c.u === 'c' && hasBox(x), pr = big ? x.price * x.per : x.price;
     p.el.querySelector('h2').textContent = x.name;
-    p.body.innerHTML = '<div class="pimg"' + (x.img ? ' style="background-image:url(' + x.img + ')"' : '') + '></div><div class="box" style="margin-top:12px"><div class="mrow"><b style="font-size:17px">' + esc(x.name) + '</b></div><div class="pr2" style="font-size:18px;color:var(--accent);font-weight:700">' + mu(pr) + ' <small style="font-weight:400;color:var(--muted)">/ ' + esc(big ? x.u2 : x.unit || '') + '</small></div><div class="hint">' + (x.stock > 0 ? 'موجودی: ' + qf(x.stock) + ' ' + esc(x.unit || '') + (hasBox(x) ? ' (' + qf(Math.floor(x.stock / x.per)) + ' ' + esc(x.u2) + ')' : '') : 'ناموجود') + '</div>' + (x.cons > 0 ? '<div class="mrow" style="margin-top:6px"><span>قیمت مصرف‌کننده</span><b>' + mu(x.cons) + '</b></div>' : '') + (x.pd ? '<div class="mrow"><span>تاریخ تولید</span><b>' + esc(x.pd) + '</b></div>' : '') + (x.cat ? '<div class="hint">دسته: ' + esc(x.cat) + '</div>' : '') + (hasBox(x) ? '<div class="hint">هر ' + esc(x.u2) + ' = ' + fa(x.per) + ' ' + esc(x.unit || '') + '</div>' : '') + '</div>' + '<div class="box sec">' + ctlH({ ...x, id }) + '</div><button class="btn ghost tap" style="margin-top:10px" data-a="fav" data-id="' + id + '">' + ((S.fav || {})[id] ? '★ حذف از علاقه‌مندی‌ها' : '☆ افزودن به علاقه‌مندی‌ها') + '</button>';
+    p.body.innerHTML = '<div class="pimg"' + (x.img ? ' style="background-image:url(' + x.img + ')"' : '') + '></div><div class="box" style="margin-top:12px"><div class="mrow"><b style="font-size:17px">' + esc(x.name) + '</b></div><div class="pr2" style="font-size:18px;color:var(--accent);font-weight:700">' + mu(pr) + ' <small style="font-weight:400;color:var(--muted)">/ ' + esc(big ? x.u2 : x.unit || '') + '</small></div><div class="hint">' + (x.stock > 0 ? 'موجودی: ' + qf(x.stock) + ' ' + esc(x.unit || '') + (hasBox(x) ? ' (' + qf(Math.floor(x.stock / x.per)) + ' ' + esc(x.u2) + ')' : '') : 'ناموجود') + '</div>' + (x.cons > 0 ? '<div class="mrow" style="margin-top:6px"><span>قیمت مصرف‌کننده</span><b>' + mu(x.cons) + '</b></div>' : '') + (x.pd ? '<div class="mrow"><span>تاریخ تولید</span><b>' + esc(x.pd) + '</b></div>' : '') + (x.ex > 0 ? '<div class="mrow"><span>تاریخ انقضا</span><b' + (x.ex - Date.now() < 30 * 864e5 ? ' style="color:#c0392b"' : '') + '>' + fdate(x.ex) + '</b></div>' : '') + (x.cat ? '<div class="hint">دسته: ' + esc(x.cat) + '</div>' : '') + (hasBox(x) ? '<div class="hint">هر ' + esc(x.u2) + ' = ' + fa(x.per) + ' ' + esc(x.unit || '') + '</div>' : '') + '</div>' + '<div class="box sec">' + ctlH({ ...x, id }) + '</div><button class="btn ghost tap" style="margin-top:10px" data-a="fav" data-id="' + id + '">' + ((S.fav || {})[id] ? '★ حذف از علاقه‌مندی‌ها' : '☆ افزودن به علاقه‌مندی‌ها') + '</button>';
   }; p.el._redraw();
 };
 /* -- سفارش -- */
