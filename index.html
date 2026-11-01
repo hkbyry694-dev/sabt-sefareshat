@@ -510,7 +510,7 @@ const CFG = BRAND.fb, FBV = '10.12.2', FBU = m => 'https://www.gstatic.com/fireb
 let fb = null, authReady = false, user = null, unsubs = [], net = { gate: null };
 let fbP = null;
 const imp = async m => { let e0; for (let i = 0; i < 3; i++) { try { return await import(FBU(m)); } catch (e) { e0 = e; await new Promise(r => setTimeout(r, 700 * (i + 1))); } } const e = new Error('SDK:' + m); e.code = 'sdk-load'; e.cause = e0; throw e; };
-function mkDb(fs, a) { try { return fs.initializeFirestore(a, { experimentalForceLongPolling: true, useFetchStreams: false }); } catch (e) { return fs.getFirestore(a); } }
+function mkDb(fs, a) { try { return fs.initializeFirestore(a, { experimentalAutoDetectFallback: true, useFetchStreams: false }); } catch (e) { return fs.getFirestore(a); } }
 function fbInit() {
   if (fb) return Promise.resolve(fb); if (fbP) return fbP;
   fbP = (async () => {
