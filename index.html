@@ -373,6 +373,45 @@ nav.bar button{transition:background-color .25s,color .25s}
 .btn:active{transform:scale(.97)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 a.btn{text-decoration:none}a.smallbtn{text-decoration:none}
+
+/* ---- راهنمای من ---- */
+#asfab{position:fixed;left:max(12px,env(safe-area-inset-left,0px));bottom:calc(88px + env(safe-area-inset-bottom,0px));z-index:51;height:52px;min-width:52px;padding:0 13px;border-radius:26px;background:linear-gradient(135deg,var(--accent),#7a5cff);color:#fff;display:flex;align-items:center;gap:8px;box-shadow:0 8px 22px rgba(30,40,140,.38);animation:asin .6s cubic-bezier(.2,.9,.25,1);transition:bottom .3s,transform .2s,opacity .2s;overflow:visible;font-size:13.5px;font-weight:600}
+#asfab::after{content:"";position:absolute;inset:-4px;border-radius:30px;border:2px solid var(--accent);opacity:0;animation:aspulse 2.8s ease-out infinite;pointer-events:none}
+#asfab .aslb{max-width:110px;overflow:hidden;white-space:nowrap;transition:max-width .5s,opacity .4s}
+#asfab.short .aslb{max-width:0;opacity:0}#asfab.short{padding:0;width:52px;justify-content:center}
+body:has(.cartbar) #asfab{bottom:calc(150px + env(safe-area-inset-bottom,0px))}
+body.aso #asfab,#sheets:has(.sw)~#asfab{opacity:0;pointer-events:none;transform:scale(.6)}
+@keyframes asin{from{opacity:0;transform:translateY(30px) scale(.6)}to{opacity:1;transform:none}}
+@keyframes aspulse{0%{opacity:.6;transform:scale(.95)}100%{opacity:0;transform:scale(1.25)}}
+#asst{position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;justify-content:flex-end;max-width:560px;margin:0 auto}
+.asbk{position:absolute;inset:0;background:rgba(8,10,30,.5);animation:fade .25s}
+.aspn{position:relative;height:88%;background:var(--bg);border-radius:26px 26px 0 0;display:flex;flex-direction:column;overflow:hidden;animation:asup .42s cubic-bezier(.2,.9,.25,1)}
+#asst.asout .aspn{animation:asdn .26s ease-in forwards}#asst.asout .asbk{animation:fadeo .26s forwards}
+@keyframes asup{from{transform:translateY(100%)}to{transform:none}}@keyframes asdn{to{transform:translateY(100%)}}@keyframes fadeo{to{opacity:0}}
+.ashd{background:var(--head);color:#fff;padding:14px 14px 14px 16px;display:flex;align-items:center;gap:12px}
+.asav{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.16);display:grid;place-items:center;animation:asfl 3s ease-in-out infinite}
+@keyframes asfl{50%{transform:translateY(-3px)}}
+.ast{flex:1;display:flex;flex-direction:column;line-height:1.5}.ast b{font-size:17px}.ast small{opacity:.85;display:flex;align-items:center;gap:6px}
+.asdot{width:9px;height:9px;border-radius:50%;background:#3ddc84;box-shadow:0 0 0 0 rgba(61,220,132,.7);animation:asdt 1.8s infinite}
+@keyframes asdt{70%{box-shadow:0 0 0 8px rgba(61,220,132,0)}100%{box-shadow:0 0 0 0 rgba(61,220,132,0)}}
+.asmsg{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
+.asb{max-width:90%;padding:10px 13px;border-radius:18px;line-height:1.8;font-size:14.5px;animation:asm .38s cubic-bezier(.2,.9,.25,1)}
+.asb.bot{align-self:flex-start;background:var(--card);border-top-right-radius:6px}
+.asb.user{align-self:flex-end;background:var(--accent);color:#fff;border-top-left-radius:6px}
+@keyframes asm{from{opacity:0;transform:translateY(12px) scale(.96)}to{opacity:1;transform:none}}
+.astyping{display:flex;gap:5px;padding:14px 16px}.astyping i{width:8px;height:8px;border-radius:50%;background:var(--muted);animation:asty 1s infinite}.astyping i:nth-child(2){animation-delay:.15s}.astyping i:nth-child(3){animation-delay:.3s}
+@keyframes asty{0%,60%,100%{transform:translateY(0);opacity:.5}30%{transform:translateY(-6px);opacity:1}}
+.as-t{display:block;font-size:15.5px;margin-bottom:4px}.as-p{margin-top:4px;color:var(--muted);font-size:13.5px}
+.as-s{margin:6px 0 0;padding:0 20px 0 0}.as-s li{margin:6px 0;animation:asm .4s both}.as-s li:nth-child(2){animation-delay:.08s}.as-s li:nth-child(3){animation-delay:.16s}.as-s li:nth-child(4){animation-delay:.24s}.as-s li:nth-child(5){animation-delay:.32s}.as-s li:nth-child(6){animation-delay:.4s}
+.as-go{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.as-go button,.as-go a{background:var(--accent);color:#fff;border-radius:999px;padding:8px 14px;font-size:13px;text-decoration:none}
+.as-go a{background:var(--soft);color:var(--accent)}
+.aschips{display:flex;gap:8px;overflow-x:auto;padding:6px 12px 8px;scrollbar-width:none}.aschips::-webkit-scrollbar{display:none}
+.aschips button{flex:none;background:var(--soft);color:var(--accent);border-radius:999px;padding:8px 14px;font-size:13px;white-space:nowrap;animation:asm .35s both}
+.asin{display:flex;gap:8px;padding:8px 12px calc(10px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);background:var(--card)}
+.asin input{flex:1;min-width:0;border:1.5px solid var(--line);border-radius:999px;background:var(--bg);padding:12px 16px;font-size:15px}
+.asin button{width:48px;height:48px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;flex:none;transition:transform .15s}.asin button:active{transform:scale(.88)}
+.asin button svg{transform:scaleX(-1)}
 .top{padding-top:calc(14px + env(safe-area-inset-top,0px))}</style></head><body><div id="app"><main id="main"></main><nav class="bar" id="nav" aria-label="بخش‌های اصلی"></nav></div><div id="pages"></div><div id="sheets"></div><script>
 const BRAND={"icon": "data:image/png;base64,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", "fb": {"apiKey": "AIzaSyCukzk8AarBkttVoIVSmSuNhgoDZWjjsfQ", "authDomain": "daftar-foroush-1e5be.firebaseapp.com", "projectId": "daftar-foroush-1e5be", "storageBucket": "daftar-foroush-1e5be.firebasestorage.app", "messagingSenderId": "940325183562", "appId": "1:940325183562:web:e613ec09311f479a8186b3", "measurementId": "G-N2NR7HBF2H"}};
 document.documentElement.dir = 'rtl'; document.documentElement.lang = 'fa';
@@ -822,7 +861,7 @@ A.more = () => {
   const p = openPage({ title: 'بیشتر', body: '' });
   p.el._redraw = () => { purgeTrash(); const fu = S.notes.filter(n => n.follow && !n.done && n.follow <= today()).length;
     const R = (a, t, sub, ic, end) => rowH({ a, title: t, sub, icon: ic, end: end || '' });
-    p.body.innerHTML = '<div class="list" style="margin-top:12px">' + R('vr', 'مسیر ویزیت امروز', S.route2 && S.route2.day === vDay() && S.route2.stops.length ? fa(S.route2.stops.length) + ' فروشگاه برای امروز' : 'برنامهٔ روزانه از طرف مدیر', 'pin', vrLeft() ? '<b class="neg">' + fa(vrLeft()) + '</b>' : '') + R('fu', 'پیگیری‌ها', 'مشتریانی که باید بهشان سر بزنی', 'bell', fu ? '<b class="neg">' + fa(fu) + '</b>' : '') + R('route', 'مسیر امروز', 'انتخاب مشتری‌ها و مسیر در نقشه', 'route') + R('rep', 'گزارش من', 'روزانه، هفتگی، ماهانه و برترین‌ها', 'chart') + R('comm', 'پورسانت من', 'درآمد و پرداخت‌ها', 'coin') + R('inact', 'مشتریان بدون سفارش', 'کسانی که مدتی سفارش نداده‌اند', 'users') + R('favs', 'پرسفارش‌ها و علاقه‌مندی‌ها', 'میان‌بر به محصولات همیشگی', 'star') + R('trash', 'سطل زباله', 'موارد حذف‌شده تا ۳۰ روز', 'trash', S.trash.length ? '<b>' + fa(S.trash.length) + '</b>' : '') + R('setg', 'تنظیمات', 'تم، اندازهٔ نوشته، پاک‌کردن حافظهٔ موقت', 'gear') + R('diag', 'عیب‌یابی اتصال', 'اگر کاتالوگ یا سفارش‌ها نمی‌آید', 'cloud') + R('bk', 'پشتیبان‌گیری', 'ذخیره و بازیابی یادداشت‌ها و مشتریان', 'cloud') + '</div>'; }; p.el._redraw();
+    p.body.innerHTML = '<div class="list" style="margin-top:12px">' + R('vr', 'مسیر ویزیت امروز', S.route2 && S.route2.day === vDay() && S.route2.stops.length ? fa(S.route2.stops.length) + ' فروشگاه برای امروز' : 'برنامهٔ روزانه از طرف مدیر', 'pin', vrLeft() ? '<b class="neg">' + fa(vrLeft()) + '</b>' : '') + R('fu', 'پیگیری‌ها', 'مشتریانی که باید بهشان سر بزنی', 'bell', fu ? '<b class="neg">' + fa(fu) + '</b>' : '') + R('route', 'مسیر امروز', 'انتخاب مشتری‌ها و مسیر در نقشه', 'route') + R('rep', 'گزارش من', 'روزانه، هفتگی، ماهانه و برترین‌ها', 'chart') + R('comm', 'پورسانت من', 'درآمد و پرداخت‌ها', 'coin') + R('inact', 'مشتریان بدون سفارش', 'کسانی که مدتی سفارش نداده‌اند', 'users') + R('favs', 'پرسفارش‌ها و علاقه‌مندی‌ها', 'میان‌بر به محصولات همیشگی', 'star') + R('trash', 'سطل زباله', 'موارد حذف‌شده تا ۳۰ روز', 'trash', S.trash.length ? '<b>' + fa(S.trash.length) + '</b>' : '') + R('guide', 'راهنمای من', 'آموزش کامل اپ و پاسخ هر سؤال', 'bot') + R('setg', 'تنظیمات', 'تم، اندازهٔ نوشته، پاک‌کردن حافظهٔ موقت', 'gear') + R('diag', 'عیب‌یابی اتصال', 'اگر کاتالوگ یا سفارش‌ها نمی‌آید', 'cloud') + R('bk', 'پشتیبان‌گیری', 'ذخیره و بازیابی یادداشت‌ها و مشتریان', 'cloud') + '</div>'; }; p.el._redraw();
 };
 A.trash = () => {
   const p = openPage({ title: 'سطل زباله', body: '' });
@@ -993,6 +1032,194 @@ A.bk = () => sub('پشتیبان‌گیری', p => {
 });
 A['bk-out'] = () => { const d = { app: 'sefaresh', v: 1, at: Date.now(), code: S.code, notes: S.notes, cust: S.cust, trash: S.trash, hidden: S.hidden, fav: S.fav, me: S.me }; const b = new Blob([JSON.stringify(d)], { type: 'application/json' }), a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'sefaresh-backup-' + isoDay(Date.now()) + '.json'; document.body.appendChild(a); a.click(); a.remove(); toast('فایل پشتیبان ساخته شد'); };
 A['bk-in'] = () => { const f = $('#bkf'); f.onchange = async () => { const file = f.files[0]; if (!file) return; try { const d = JSON.parse(await file.text()); if (d.app !== 'sefaresh') throw 0; ask('اطلاعات فعلی با فایل ادغام شود؟', 'ادغام', () => { const ids = new Set(S.notes.map(n => n.id)); (d.notes || []).forEach(n => { if (!ids.has(n.id)) S.notes.push(n); }); S.cust = { ...(d.cust || {}), ...S.cust }; S.fav = { ...(d.fav || {}), ...S.fav }; S.hidden = { ...(d.hidden || {}), ...S.hidden }; const tids = new Set(S.trash.map(x => x.tid)); (d.trash || []).forEach(x => { if (!tids.has(x.tid)) S.trash.push(x); }); S.me = S.me || d.me; save(); backup(); toast('بازیابی شد'); }); } catch (e) { toast('فایل معتبر نیست.', 1); } }; f.click(); };
+
+/* ================= راهنمای من (دستیار داخلی؛ بدون اینترنت) ================= */
+Object.assign(IC, { bot: '<rect x="4" y="8" width="16" height="11" rx="4"/><path d="M12 8V5M9 13h.01M15 13h.01M10 16.2c1.3.8 2.7.8 4 0"/><circle cx="12" cy="4" r="1"/>', send: '<path d="M4 12l16-8-6 16-3-7z"/>' });
+const GR = { start: 'شروع و ورود', prod: 'محصولات و کاتالوگ', order: 'ثبت سفارش', pre: 'پیش‌فاکتور و سفارش‌ها', cust: 'مشتریان و یادداشت', route: 'مسیر و پیگیری', rep: 'گزارش و پورسانت', set: 'تنظیمات و مشکلات' };
+const KB = [
+  { id: 'tour', g: 'start', t: 'آموزش کامل اپ (نقشه‌ی کلی)', w: 'آموزش کامل اپ نقشه کلی شروع کار راهنما همه چیز اپ چطور کار میکند معرفی', s: [
+    'نوار پایین اپ ۶ تب دارد: «محصولات»، «ثبت سفارش»، «یادداشت»، «مشتریان»، «سفارشات» و «پروفایل».',
+    'دکمه‌ی ☰ (بالا سمت راست هر تب) منوی «بیشتر» را باز می‌کند: مسیر ویزیت امروز، پیگیری‌ها، مسیر امروز، گزارش من، پورسانت من، مشتریان بدون سفارش، پرسفارش‌ها، سطل زباله، تنظیمات، عیب‌یابی اتصال، پشتیبان‌گیری.',
+    'روند پیشنهادی یک روز کاری: ۱) بیشتر ← مسیر ویزیت امروز ۲) رفتن به فروشگاه ۳) تب محصولات ← انتخاب کالا ۴) تب ثبت سفارش ← «بررسی و تأیید سفارش» ۵) پایان روز: بیشتر ← گزارش من.',
+    'کاتالوگ فقط بار اول (و وقتی خودت بزنی) دریافت می‌شود و بعد بدون اینترنت هم دیده می‌شود.'], go: [['باز کردن بیشتر', 'more']] },
+  { id: 'login1', g: 'start', t: 'اولین ورود و ساخت رمز', w: 'اولین ورود ساخت رمز رمز عبور کد ویزیتور ثبت نام فعال سازی اکانت حساب', s: [
+    'صفحه‌ی ورود ← در «کد ویزیتور» کدی را بنویس که مدیر به تو داده (مثلاً ۰۰۰۰۱).',
+    'دکمه‌ی «اولین ورود (ساخت رمز)» را بزن.',
+    'یک رمز دلخواه (حداقل ۶ حرف) بساز و تکرار کن. از این به بعد با همین رمز وارد می‌شوی.',
+    'اگر نوشت کد پیدا نشد یا غیرفعال است، از مدیر بخواه حساب را فعال کند.'], go: [] },
+  { id: 'login2', g: 'set', t: 'ورود انجام نمی‌شود', w: 'ورود نمیشه وارد نمیشم خطا اتصال اینترنت قطع رمز اشتباه نمیتونم وارد بشم لاگین فیلتر', s: [
+    'اول مطمئن شو اینترنت گوشی وصل است.',
+    'در صفحه‌ی ورود «آزمایش اتصال» را بزن. اگر خطا داد، اتصال به سرویس گوگل برقرار نیست؛ یک بار با فیلترشکن روشن وارد شو. بعد از ورود موفق، اپ بدون فیلترشکن هم کاتالوگ ذخیره‌شده را نشان می‌دهد.',
+    'اگر نوشت «رمز اشتباه است»، رمز را دقیق (با حروف انگلیسی و عدد) بنویس. اگر فراموشش کردی از مدیر بخواه حساب را بازنشانی کند.',
+    'اگر کد غیرفعال است، مدیر باید حسابت را فعال کند.'], go: [] },
+  { id: 'forgot', g: 'start', t: 'رمز را فراموش کرده‌ام', w: 'فراموش کردم رمز فراموشی رمز یادم نیست رمزم رو یادم رفته ریست بازنشانی رمز', s: [
+    'اگر می‌دانی رمز فعلی را و فقط می‌خواهی عوضش کنی: تب پروفایل ← «تغییر رمز».',
+    'اگر رمز را یادت نیست، بازنشانی فقط از سمت مدیر ممکن است؛ با مدیر یا پشتیبانی تماس بگیر و کد ویزیتور خودت را بگو.'], go: [['تب پروفایل', 'me']], call: 1 },
+  { id: 'catalog', g: 'prod', t: 'محصولات نمایش داده نمی‌شود / بروزرسانی کاتالوگ', w: 'محصولات نمیاد کاتالوگ خالی نمایش داده نمیشه بروزرسانی بروز رسانی به روز کاتالوگ جدید قیمت جدید محصول جدید نیامد', s: [
+    'تب پروفایل ← «به‌روزرسانی کاتالوگ و ارسال» را بزن (یا در تب محصولات، دکمه‌ی «بروزرسانی کاتالوگ» بالای لیست).',
+    'اگر نوشت کاتالوگی منتشر نشده، مدیر باید در اپ دفتر فروش از بیشتر ← کاتالوگ محصولات، «انتشار همین حالا» را بزند.',
+    'اگر هنوز نیامد: ☰ بیشتر ← «عیب‌یابی اتصال» ← «آزمایش دریافت محصولات».',
+    'کاتالوگ ذخیره‌شده بدون اینترنت هم دیده می‌شود؛ فقط برای دریافت نسخه‌ی جدید اینترنت لازم است.'], go: [['تب پروفایل', 'me'], ['عیب‌یابی اتصال', 'diag']] },
+  { id: 'find', g: 'prod', t: 'جستجو و پیدا کردن محصول', w: 'جستجو پیدا کردن محصول دسته بندی فیلتر ستاره علاقه مندی دنبال کالا', s: [
+    'تب محصولات ← کادر جستجو (بالا) ← نام کالا را بنویس.',
+    'نوار دسته‌ها زیر جستجو است؛ روی هر دسته بزن تا فقط همان نمایش داده شود. دسته‌ی ★ محصولات علاقه‌مندی توست.',
+    'روی نام یا عکس محصول بزن تا صفحه‌ی کامل کالا (عکس، قیمت، موجودی، تاریخ تولید و انقضا) باز شود.'], go: [['تب محصولات', 'prod']] },
+  { id: 'detail', g: 'prod', t: 'قیمت مصرف‌کننده، تاریخ تولید و انقضا کالا', w: 'قیمت مصرف کننده تاریخ تولید تاریخ انقضا انقضا موجودی عکس جزئیات اطلاعات کالا', s: [
+    'تب محصولات ← روی نام یا عکس کالا بزن.',
+    'در صفحه‌ی کالا: قیمت فروش به تو، موجودی، «قیمت مصرف‌کننده»، «تاریخ تولید» و «تاریخ انقضا» را می‌بینی. اگر انقضا کمتر از ۳۰ روز مانده باشد قرمز می‌شود.',
+    'این اطلاعات را می‌توانی به مشتری نشان بدهی تا مطمئن‌تر خرید کند.'], go: [['تب محصولات', 'prod']] },
+  { id: 'units', g: 'prod', t: 'انتخاب عدد یا کارتن', w: 'کارتن عدد واحد باکس بسته تعداد جعبه واحد بزرگ', s: [
+    'تب محصولات ← کالایی که واحد بزرگ‌تر (مثلاً کارتن) دارد، کنار تعداد دکمه‌ی انتخاب واحد دارد.',
+    'روی «کارتن» یا «عدد» بزن؛ قیمت و جمع خودکار بر اساس واحد انتخابی حساب می‌شود.',
+    'با دکمه‌ی + و − تعداد را کم و زیاد کن، یا روی عدد بزن و تعداد را بنویس.'], go: [['تب محصولات', 'prod']] },
+  { id: 'fav', g: 'prod', t: 'علاقه‌مندی‌ها و پرسفارش‌ها', w: 'علاقه مندی ستاره پرسفارش محصولات همیشگی میانبر مورد علاقه', s: [
+    'تب محصولات ← روی ستاره‌ی کنار محصول بزن تا به علاقه‌مندی‌ها اضافه شود.',
+    'منوی ☰ بیشتر ← «پرسفارش‌ها و علاقه‌مندی‌ها» ← میان‌بر به کالاهایی که بیشتر می‌فروشی.'], go: [['باز کردن پرسفارش‌ها', 'favs']] },
+  { id: 'order', g: 'order', t: 'ثبت سفارش قدم به قدم', w: 'ثبت سفارش سفارش گرفتن سفارش بدم چطور سفارش ثبت کنم سبد خرید ارسال سفارش تایید سفارش', s: [
+    'تب محصولات ← با + کالاها را به سبد اضافه کن (نوار «N محصول در سبد» پایین صفحه می‌آید و روی آن بزنی به تب ثبت سفارش می‌روی).',
+    'تب ثبت سفارش ← بالا نام مشتری را بنویس (اگر قبلاً ثبت شده باشد، شماره و آدرس خودکار پر می‌شود). موبایل و آدرس را کامل کن.',
+    'اقلام را بررسی کن؛ با + و − یا دکمه‌ی «+ افزودن محصول» تغییرش بده.',
+    'در بخش «تخفیف، کرایه و پرداخت»: تخفیف، هزینه‌ی ارسال، نحوه‌ی پرداخت (نقد، اعتباری، چک)، تاریخ سررسید و تاریخ تحویل را بزن.',
+    'دکمه‌ی «بررسی و تأیید سفارش» ← فاکتور را به مشتری نشان بده ← «تأیید و ارسال سفارش».',
+    'بعد از ارسال، سفارش در تب سفارشات دیده می‌شود. بدون اینترنت هم ثبت می‌شود و با وصل شدن اینترنت خودکار ارسال می‌شود.'], go: [['تب محصولات', 'prod'], ['تب ثبت سفارش', 'ord']] },
+  { id: 'pay', g: 'order', t: 'تخفیف، کرایه، نقد، اعتباری و چک', w: 'تخفیف کرایه هزینه ارسال نقد اعتباری چک سررسید تاریخ تسویه نحوه پرداخت تاریخ تحویل', s: [
+    'تب ثبت سفارش ← بخش «تخفیف، کرایه و پرداخت».',
+    'تخفیف و هزینه‌ی ارسال را به مبلغ بنویس؛ جمع نهایی همان لحظه پایین صفحه به‌روز می‌شود.',
+    'نحوه‌ی پرداخت: «نقد»، «اعتباری» یا «چک». برای اعتباری و چک، «تاریخ تسویه / سررسید» را از تقویم شمسی انتخاب کن.',
+    '«تاریخ تحویل دلخواه» را هم می‌توانی از تقویم انتخاب کنی.'], go: [['تب ثبت سفارش', 'ord']] },
+  { id: 'price', g: 'order', t: 'تغییر قیمت کالا در سفارش', w: 'تغییر قیمت قیمت رو عوض کنم ویرایش قیمت قیمت دلخواه گرون ارزون', s: [
+    'تب ثبت سفارش ← زیر هر کالا اگر کادر قیمت می‌بینی، می‌توانی قیمت را همان‌جا تغییر بدهی.',
+    'اگر کادر قیمت نیست، مدیر اجازه‌ی تغییر قیمت را برای تو روشن نکرده است. از او بخواه در دفتر فروش، بیشتر ← کاتالوگ، گزینه‌ی «ویزیتور بتواند قیمت را تغییر بدهد» را روشن کند.'], go: [['تب ثبت سفارش', 'ord']] },
+  { id: 'loc', g: 'order', t: 'ثبت موقعیت مکانی مشتری', w: 'موقعیت مکانی لوکیشن نقشه آدرس gps مکان ثبت موقعیت', s: [
+    'تب ثبت سفارش ← دکمه‌ی «ثبت موقعیت مکانی من» (وقتی جلوی مغازه‌ی مشتری هستی).',
+    'اگر پرسید، دسترسی موقعیت مکانی را برای مرورگر «مجاز» کن.',
+    'همین دکمه در فرم یادداشت هم هست.'], go: [['تب ثبت سفارش', 'ord']] },
+  { id: 'pre', g: 'pre', t: 'پیش‌فاکتور برای مشتری (عکس یا متن)', w: 'پیش فاکتور پیش‌فاکتور قیمت به مشتری نشان دادن عکس متن واتساپ پیامک ارسال فاکتور برای مشتری', s: [
+    'قبل از ارسال سفارش: تب ثبت سفارش ← «بررسی و تأیید سفارش» ← «پیش‌فاکتور برای مشتری».',
+    'بعد از ثبت سفارش: تب سفارشات ← روی سفارش بزن ← «پیش‌فاکتور برای مشتری».',
+    'دو حالت داری: «تصویر» (برای ارسال یا ذخیره عکس) و «متن» (کپی، پیامک، واتساپ، اشتراک).',
+    'نام فروشگاه، تلفن و مدت اعتبار روی پیش‌فاکتور را مدیر در دفتر فروش تنظیم می‌کند.'], go: [['تب سفارشات', 'orders']] },
+  { id: 'offline', g: 'order', t: 'ثبت سفارش بدون اینترنت', w: 'آفلاین بدون اینترنت اینترنت ندارم نت ندارم در انتظار ارسال سفارش ارسال نشد ارسال نمیشه', s: [
+    'سفارش را عادی ثبت کن. اگر اینترنت نباشد در گوشی ذخیره می‌شود و بالای صفحه می‌نویسد «N سفارش در انتظار ارسال».',
+    'وقتی اینترنت وصل شد، خودکار ارسال می‌شود. اگر نشد: تب پروفایل ← «به‌روزرسانی کاتالوگ و ارسال».',
+    'تا قبل از ارسال، از گوشی خارج نشو (دکمه‌ی «خروج از حساب» سفارش‌های ارسال‌نشده را پاک می‌کند).'], go: [['تب پروفایل', 'me']] },
+  { id: 'status', g: 'pre', t: 'معنی وضعیت سفارش‌ها', w: 'وضعیت سفارش جدید تایید شد فاکتور شد ارسال شد لغو منتظر ارسال معنی وضعیت', s: [
+    'تب سفارشات ← نوار فیلتر وضعیت بالا.',
+    '«منتظر ارسال»: هنوز از گوشی به سرور نرفته. «جدید»: ارسال شده و مدیر ندیده. «تأیید»: مدیر تأیید کرده. «فاکتور شد»: فاکتور رسمی ثبت شده. «ارسال شد»: بار رفته. «لغو»: سفارش لغو شده.'], go: [['تب سفارشات', 'orders']] },
+  { id: 'cancel', g: 'pre', t: 'لغو سفارش', w: 'لغو سفارش کنسل انصراف سفارش اشتباه کنسل کردن', s: [
+    'تب سفارشات ← روی سفارش بزن ← «لغو سفارش».',
+    'فقط سفارشی که هنوز «جدید» است لغو می‌شود. اگر مدیر تأییدش کرده، با مدیر هماهنگ کن.'], go: [['تب سفارشات', 'orders']] },
+  { id: 'again', g: 'pre', t: 'ثبت سفارش مشابه', w: 'سفارش مشابه تکرار سفارش دوباره سفارش قبلی کپی سفارش', s: [
+    'تب سفارشات ← روی سفارش قبلی بزن ← «ثبت سفارش مشابه».',
+    'کالاها در سبد گذاشته می‌شود و به تب ثبت سفارش می‌روی؛ تعداد را تغییر بده و ارسال کن.'], go: [['تب سفارشات', 'orders']] },
+  { id: 'del', g: 'pre', t: 'حذف سفارش یا مشتری و بازگردانی', w: 'حذف پاک کردن سطل زباله بازگردانی برگردان اشتباهی پاک شد حذف سفارش حذف مشتری حذف یادداشت', s: [
+    'حذف سفارش: تب سفارشات ← روی سفارش ← «حذف از لیست». حذف مشتری: تب مشتریان ← روی مشتری ← «حذف مشتری». حذف یادداشت: تب یادداشت ← روی یادداشت ← حذف.',
+    'همه‌ی موارد حذف‌شده ۳۰ روز در سطل زباله می‌مانند: ☰ بیشتر ← «سطل زباله» ← روی مورد بزن ← «بازگردانی».',
+    'بعد از ۳۰ روز خودکار برای همیشه پاک می‌شود. برای حذف همیشگی زودتر، در سطل زباله «حذف همیشگی» را بزن.'], go: [['باز کردن سطل زباله', 'trash']] },
+  { id: 'cust', g: 'cust', t: 'مشتریان: افزودن، ویرایش، سفارش', w: 'مشتری مشتریان افزودن مشتری ویرایش مشتری شماره آدرس مشتری جستجوی مشتری سابقه مشتری', s: [
+    'مشتری جدید خودکار اضافه می‌شود: وقتی سفارش یا یادداشت با نام جدید ثبت کنی.',
+    'تب مشتریان ← جستجو با نام یا شماره ← روی مشتری بزن تا سفارش‌ها و ویزیت‌هایش را ببینی.',
+    'داخل مشتری: «ثبت سفارش» (سفارش با اطلاعات او شروع می‌شود)، «یادداشت»، «ویرایش اطلاعات» و «حذف مشتری».'], go: [['تب مشتریان', 'cust']] },
+  { id: 'note', g: 'cust', t: 'یادداشت ویزیت و تاریخ پیگیری', w: 'یادداشت ویزیت نوشتن یادداشت نتیجه ویزیت درخواست مشتری تاریخ پیگیری پیگیری یادآوری بعدا زنگ بزنم', s: [
+    'تب یادداشت ← «یادداشت جدید».',
+    'نام فروشگاه، شماره، آدرس و متن یادداشت (نتیجه‌ی ویزیت یا درخواست مشتری) را بنویس. موقعیت مکانی هم می‌توانی ثبت کنی.',
+    '«تاریخ پیگیری» را از تقویم شمسی انتخاب کن تا همان روز در بالای تب یادداشت یادآوری شود.',
+    'بعد از انجام کار، یادداشت را باز کن و «انجام شد» را بزن.'], go: [['تب یادداشت', 'note']] },
+  { id: 'fu', g: 'route', t: 'پیگیری‌های امروز', w: 'پیگیری ها پیگیری امروز عقب افتاده باید سر بزنم یادآور یادآوری', s: [
+    '☰ بیشتر ← «پیگیری‌ها»؛ مشتریانی که تاریخ پیگیری‌شان رسیده یا گذشته.',
+    'همین فهرست بالای تب یادداشت هم نشان داده می‌شود. عدد قرمز کنار «پیگیری‌ها» تعداد عقب‌افتاده‌هاست.'], go: [['باز کردن پیگیری‌ها', 'fu']] },
+  { id: 'vroute', g: 'route', t: 'مسیر ویزیت امروز (برنامه‌ی مدیر)', w: 'مسیر ویزیت امروز برنامه روزانه فروشگاه ها منطقه بازدید شد بسته بود علاقه ای نداشت مسیر مدیر', s: [
+    '☰ بیشتر ← «مسیر ویزیت امروز». فهرست فروشگاه‌هایی که مدیر برای امروز به تو داده نمایش داده می‌شود (از ساعت ۶ صبح هر روز).',
+    'برای هر فروشگاه یکی را بزن: «بازدید شد»، «بسته بود»، «علاقه‌ای نداشت»، یا «ثبت سفارش» (مستقیم به فرم سفارش با اطلاعات همان فروشگاه می‌رود).',
+    'اشتباه زدی؟ «بازگرداندن» را بزن.',
+    'عدد قرمز کنار این گزینه تعداد فروشگاه‌های باقی‌مانده است.'], go: [['باز کردن مسیر ویزیت امروز', 'vr']] },
+  { id: 'route', g: 'route', t: 'مسیر امروز (انتخاب مشتری‌ها و نقشه)', w: 'مسیر امروز نقشه مسیریابی انتخاب مشتری شروع مسیر نشان بلد', s: [
+    '☰ بیشتر ← «مسیر امروز».',
+    'با «افزودن پیگیری‌های امروز» یا انتخاب مشتری‌ها، فهرست ملاقات‌های خودت را بساز؛ با ↑ و ↓ ترتیب را عوض کن و با ✕ حذف کن.',
+    '«شروع مسیر در نقشه» را بزن تا مسیر در برنامه‌ی نقشه‌ی گوشی باز شود.'], go: [['باز کردن مسیر امروز', 'route']] },
+  { id: 'rep', g: 'rep', t: 'گزارش فروش من', w: 'گزارش گزارش من فروش امروز هفتگی ماهانه برترین مشتری ها آمار تعداد سفارش جمع فروش', s: [
+    '☰ بیشتر ← «گزارش من»؛ فروش و تعداد سفارش روزانه، هفتگی و ماهانه و برترین مشتری‌ها و کالاها.',
+    'خلاصه‌ی امروز و این ماه را در تب پروفایل هم می‌بینی.'], go: [['باز کردن گزارش من', 'rep']] },
+  { id: 'comm', g: 'rep', t: 'پورسانت و پرداخت‌های من', w: 'پورسانت درآمد حقوق پرداخت سود من پورسانت من کمیسیون', s: [
+    '☰ بیشتر ← «پورسانت من»؛ مجموع درآمدت، مبالغی که مدیر پرداخت کرده و باقی‌مانده.',
+    'این عددها را مدیر از دفتر فروش منتشر می‌کند و فقط مدیر می‌تواند اصلاحشان کند. اگر اختلاف دیدی با او تماس بگیر.'], go: [['باز کردن پورسانت من', 'comm']] },
+  { id: 'inact', g: 'rep', t: 'مشتریان بدون سفارش', w: 'مشتریان بدون سفارش سفارش نداده غیر فعال مشتری قدیمی چند وقت سفارش نداده', s: [
+    '☰ بیشتر ← «مشتریان بدون سفارش»؛ کسانی که مدتی سفارش نداده‌اند.',
+    'روی هر کدام بزنی می‌توانی تماس بگیری یا سفارش بزنی.'], go: [['باز کردن این فهرست', 'inact']] },
+  { id: 'theme', g: 'set', t: 'تم شب و روز و اندازه‌ی نوشته', w: 'تم شب روز تیره روشن حالت شب اندازه نوشته فونت بزرگ کوچک ظاهر', s: [
+    '☰ بیشتر ← «تنظیمات».',
+    'بخش «ظاهر»: تم (خودکار، روشن، تیره) و اندازه‌ی نوشته (کوچک، متوسط، بزرگ).'], go: [['باز کردن تنظیمات', 'setg']] },
+  { id: 'pw', g: 'set', t: 'تغییر رمز و خروج از حساب', w: 'تغییر رمز رمز جدید خروج از حساب خارج شدن لاگ اوت پسورد رمز عوض کنم', s: [
+    'تب پروفایل ← «تغییر رمز» ← رمز فعلی و رمز جدید را بنویس.',
+    'خروج: تب پروفایل ← «خروج از حساب». قبلش مطمئن شو سفارش «در انتظار ارسال» نداری.'], go: [['تب پروفایل', 'me']] },
+  { id: 'cache', g: 'set', t: 'نسخه‌ی جدید اپ نمی‌آید', w: 'نسخه جدید آپدیت اپ به روز نمیشه بروزرسانی اپ پاک کردن حافظه موقت کش', s: [
+    'اپ را کامل ببند و دوباره باز کن (نسخه‌ی جدید در همان باز شدن دوم می‌آید).',
+    'اگر نیامد: ☰ بیشتر ← «تنظیمات» ← «پاک‌کردن حافظه‌ی موقت و بارگذاری دوباره». اطلاعات و سفارش‌هایت پاک نمی‌شود.'], go: [['باز کردن تنظیمات', 'setg']] },
+  { id: 'diag', g: 'set', t: 'عیب‌یابی اتصال', w: 'عیب یابی اتصال مشکل اتصال سرور وصل نمیشه خطا ارتباط تست اتصال', s: [
+    '☰ بیشتر ← «عیب‌یابی اتصال»؛ وضعیت اینترنت، ورود، تعداد محصولات دریافتی و آخرین خطا را می‌بینی.',
+    'دکمه‌ی «آزمایش دریافت محصولات» را بزن؛ نتیجه می‌گوید کاتالوگ روی سرور هست یا نه یا خطا چیست.',
+    'نتیجه را برای پشتیبانی بفرست تا سریع‌تر کمکت کنند.'], go: [['باز کردن عیب‌یابی', 'diag']] },
+  { id: 'bk', g: 'set', t: 'پشتیبان‌گیری از یادداشت‌ها و مشتریان', w: 'پشتیبان بکاپ ذخیره بازیابی فایل پشتیبان گوشی عوض کردم اطلاعات از بین رفت', s: [
+    '☰ بیشتر ← «پشتیبان‌گیری». با اینترنت، اطلاعات خودکار هم در سرور ذخیره می‌شود.',
+    'برای ذخیره: «دریافت فایل پشتیبان». برای بازیابی در گوشی جدید: فایل را انتخاب و «ادغام» را بزن.',
+    'سفارش‌ها روی سرور هستند و با ورود دوباره برمی‌گردند.'], go: [['باز کردن پشتیبان‌گیری', 'bk']] },
+  { id: 'install', g: 'start', t: 'نصب اپ روی صفحه‌ی اصلی گوشی', w: 'نصب اپ صفحه اصلی افزودن به صفحه اصلی آیکون برنامه آیفون اندروید نصب pwa', s: [
+    'اندروید (کروم): منوی ⋮ ← «افزودن به صفحه‌ی اصلی» (یا «نصب برنامه»).',
+    'آیفون (سافاری): دکمه‌ی اشتراک‌گذاری ⬆︎ ← «افزودن به صفحه‌ی اصلی».',
+    'بعد از آن مثل یک برنامه‌ی معمولی از آیکونش باز می‌شود.'], go: [] },
+  { id: 'support', g: 'set', t: 'تماس با پشتیبانی', w: 'پشتیبانی تماس شماره تلفن پشتیبان مشکل حل نشد کمک ارتباط با مدیر', s: [
+    'شماره‌ی پشتیبانی: ۰۹۱۹۷۷۱۳۹۵۲',
+    'قبل از تماس، نتیجه‌ی «عیب‌یابی اتصال» (☰ بیشتر ← عیب‌یابی اتصال) و توضیح دقیق مشکل را آماده کن.'], go: [], call: 1 }
+];
+const SUP = '09197713952';
+const asN = t => String(t || '').replace(/[يى]/g, 'ی').replace(/ك/g, 'ک').replace(/[٠-٩]/g, c => '٠١٢٣٤٥٦٧٨٩'.indexOf(c)).replace(/[۰-۹]/g, c => '۰۱۲۳۴۵۶۷۸۹'.indexOf(c)).replace(/[‌‏]/g, ' ').replace(/[؟?!.,،:؛()«»"'‌]/g, ' ').replace(/\s+/g, ' ').trim().toLowerCase();
+const AS_STOP = new Set(['من', 'را', 'رو', 'که', 'در', 'به', 'از', 'با', 'یا', 'این', 'آن', 'چی', 'چه', 'چطور', 'چگونه', 'کجا', 'کجاست', 'چرا', 'میشه', 'می‌شه', 'می', 'شه', 'هست', 'نیست', 'برای', 'یه', 'یک', 'و', 'هم', 'ام', 'کنم', 'بکنم', 'بزنم', 'میخوام', 'میخواهم', 'خواهم', 'بگو', 'بگید', 'بهم', 'لطفا']);
+function asFind(q) {
+  const n = asN(q), toks = n.split(' ').filter(t => t.length >= 2 && !AS_STOP.has(t)); if (!toks.length) return [];
+  const sc = KB.map(e => { const T = asN(e.t), W = asN(e.w); let s = 0; if (T.includes(n) || W.includes(n)) s += 6; toks.forEach(t => { const st = t.length > 3 ? t.replace(/(ها|های|ان|ات|ی)$/, '') : t; if (T.includes(st)) s += 3; if (W.includes(st)) s += 2; if (W.split(' ').some(w => w.length > 2 && st.includes(w))) s += 1; }); return [e, s]; }).filter(x => x[1] > 0).sort((a, b) => b[1] - a[1]);
+  return sc.length && sc[0][1] >= 2 ? sc.map(x => x[0]).slice(0, 4) : [];
+}
+const gtab = id => { while (pages.length) pages.pop().remove(); ui.tab = id; ui.q = ''; render(); };
+const GOF = { prod: () => gtab('prod'), ord: () => gtab('ord'), note: () => gtab('note'), cust: () => gtab('cust'), orders: () => gtab('orders'), me: () => gtab('me'), more: () => A.more(), vr: () => A.vr(), fu: () => A.fu(), route: () => A.route(), rep: () => A.rep(), comm: () => A.comm(), inact: () => A.inact(), favs: () => A.favs(), trash: () => A.trash(), setg: () => A.setg(), diag: () => A.diag(), bk: () => A.bk() };
+const asHist = [];
+function asAnswer(e) {
+  return '<b class="as-t">' + esc(e.t) + '</b><ol class="as-s">' + e.s.map(x => '<li>' + esc(x) + '</li>').join('') + '</ol>' +
+    ((e.go || []).length || e.call ? '<div class="as-go">' + (e.go || []).map(g => '<button class="tap" data-a="as-go" data-k="' + g[1] + '">' + esc(g[0]) + ' ←</button>').join('') + (e.call ? '<a class="tap" href="tel:' + SUP + '">تماس: ' + fa(SUP) + '</a><a class="tap" href="https://wa.me/98' + SUP.slice(1) + '" target="_blank" rel="noopener">واتساپ</a>' : '') + '</div>' : '');
+}
+function asMsg(kind, html) {
+  const box = $('#asmsg'); if (!box) return; const d = document.createElement('div'); d.className = 'asb ' + kind; d.innerHTML = html; box.appendChild(d); box.scrollTop = box.scrollHeight; return d;
+}
+function asChips(list) { const c = $('#aschips'); if (!c) return; c.innerHTML = list.map(x => '<button class="tap" data-a="as-q" data-q="' + esc(x[0]) + '">' + esc(x[1]) + '</button>').join(''); }
+const asTopics = () => Object.keys(GR).map(k => ['@' + k, GR[k]]);
+function asReply(q, label) {
+  const box = $('#asmsg'); if (!box) return; const ut = esc(label || q); asMsg('user', ut); asHist.push(['user', ut]);
+  const ty = asMsg('bot astyping', '<i></i><i></i><i></i>');
+  setTimeout(() => {
+    if (ty) ty.remove(); let html, chips;
+    if (q[0] === '@') { const g = q.slice(1), es = KB.filter(e => e.g === g); html = '<b class="as-t">' + esc(GR[g]) + '</b><div class="as-p">کدام را می‌خواهی؟ روی یکی بزن:</div>'; chips = es.map(e => ['#' + e.id, e.t]); }
+    else if (q[0] === '#') { const e = KB.find(x => x.id === q.slice(1)); html = e ? asAnswer(e) : 'پیدا نشد.'; chips = asTopics(); }
+    else { const r = asFind(q); if (r.length) { html = asAnswer(r[0]); chips = r.slice(1).map(e => ['#' + e.id, e.t]); chips.push(['@menu', 'همه‌ی موضوع‌ها']); } else { html = '<b class="as-t">جواب دقیقی پیدا نکردم</b><div class="as-p">سؤالت را با کلمه‌های ساده‌تر بنویس (مثلاً «ثبت سفارش»، «پیش‌فاکتور»، «رمز»، «کاتالوگ») یا از موضوع‌ها انتخاب کن. اگر حل نشد با پشتیبانی تماس بگیر: <a href="tel:' + SUP + '" dir="ltr">' + fa(SUP) + '</a></div>'; chips = asTopics(); } }
+    if (q === '@menu') { html = '<b class="as-t">موضوع‌ها</b><div class="as-p">یکی را انتخاب کن یا سؤالت را بنویس.</div>'; chips = asTopics(); }
+    asMsg('bot', html); asHist.push(['bot', html]); asChips(chips || asTopics());
+  }, 520);
+}
+function asOpen() {
+  if ($('#asst')) return; document.body.classList.add('aso');
+  const w = document.createElement('div'); w.id = 'asst';
+  w.innerHTML = '<div class="asbk" data-a="as-close"></div><div class="aspn"><div class="ashd"><div class="asav">' + ico('bot', 26) + '</div><div class="ast"><b>راهنمای من</b><small><i class="asdot"></i>آنلاین • آماده‌ی پاسخ</small></div><button class="hbtn tap" data-a="as-close" aria-label="بستن">' + ico('plus', 22).replace('<svg', '<svg style="transform:rotate(45deg)"') + '</button></div>' +
+    '<div class="asmsg" id="asmsg"></div><div class="aschips" id="aschips"></div><div class="asin"><input id="asq" placeholder="سؤالت را بنویس… مثلاً: چطور سفارش ثبت کنم؟" autocomplete="off" enterkeyhint="send"><button class="tap" data-a="as-send" aria-label="ارسال">' + ico('send', 22) + '</button></div></div>';
+  document.body.appendChild(w);
+  const box = $('#asmsg');
+  if (asHist.length) { asHist.forEach(([k, h]) => asMsg(k, h)); asChips(asTopics()); }
+  else { setTimeout(() => { asMsg('bot', 'سلام' + (S.name ? ' ' + esc(S.name) : '') + '! من «راهنمای من» هستم 👋<div class="as-p">هر سؤالی درباره‌ی کار با اپ داری بنویس، یا برای آموزش کامل و مسیر دقیق هر بخش روی گزینه‌ها بزن.</div>'); asHist.push(['bot', 'سلام! من «راهنمای من» هستم 👋<div class="as-p">هر سؤالی درباره‌ی کار با اپ داری بنویس، یا از موضوع‌ها انتخاب کن.</div>']); asChips([['#tour', 'آموزش کامل اپ'], ['#order', 'ثبت سفارش قدم به قدم'], ['#catalog', 'محصولات نمی‌آید'], ['@menu', 'همه‌ی موضوع‌ها']]); }, 250); }
+}
+function asClose() { const w = $('#asst'); if (!w) return; w.classList.add('asout'); document.body.classList.remove('aso'); setTimeout(() => w.remove(), 260); }
+A['as-open'] = () => asOpen(); A.guide = () => asOpen(); A['as-close'] = () => asClose();
+A['as-send'] = () => { const i = $('#asq'); const q = (i.value || '').trim(); if (!q) return; i.value = ''; asReply(q); };
+A['as-q'] = t => asReply(t.dataset.q, t.textContent);
+A['as-go'] = t => { const f = GOF[t.dataset.k]; asClose(); if (f) setTimeout(f, 120); };
+document.addEventListener('keydown', e => { if (e.target && e.target.id === 'asq' && e.key === 'Enter') { e.preventDefault(); A['as-send'](); } });
+(function () { const b = document.createElement('button'); b.id = 'asfab'; b.className = 'tap'; b.setAttribute('data-a', 'as-open'); b.setAttribute('aria-label', 'راهنمای من'); b.innerHTML = ico('bot', 26) + '<span class="aslb">راهنمای من</span>'; document.body.appendChild(b); setTimeout(() => b.classList.add('short'), 4500); })();
 const VIEWS = { prod: tabProd, ord: tabOrd, note: tabNote, cust: tabCust, orders: tabOrders, me: tabMe };
 /* ---- شروع ---- */
 (async function () {
